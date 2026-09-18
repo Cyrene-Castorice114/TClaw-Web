@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06070c">
+  <meta name="color-scheme" content="dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TClaw">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <title>TClaw-WebUI</title>
+
+  <link rel="preconnect" href="https://www.loliapi.com" crossorigin>
+  <link rel="preconnect" href="https://favicon.im" crossorigin>
+  <link rel="preconnect" href="https://icons.duckduckgo.com" crossorigin>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+
+  <!-- Markdown 解析库 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/click-fx.css">
+  <link rel="stylesheet" href="css/bg-image.css">
+  <link rel="stylesheet" href="css/loading.css">
+  <link rel="stylesheet" href="css/section.css">
+</head>
+<body>
+
+  <!-- ========== 加载页 ========== -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <p class="loading-title">请稍候</p>
+      <p class="loading-detail" id="loadingDetail">正在初始化</p>
+      <div class="loading-bar">
+        <div class="loading-bar-fill" id="loadingBarFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 背景极光 -->
+  <div class="bg" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <div class="layout">
+
+    <!-- ========== 左侧：个人名片 ========== -->
+    <aside class="glass profile">
+      <div class="profile-top">
+        <div class="avatar">
+          <img id="avatarImg" src="" alt="头像">
+        </div>
+        <div class="profile-info">
+          <h1 class="name" id="profileName"></h1>
+          <p  class="role" id="profileRole"></p>
+          <p  class="bio"  id="profileBio"></p>
+        </div>
+      </div>
+
+      <div class="profile-bottom">
+        <a class="contact-btn" id="contactBtn" href="#">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round"
+               stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="3"/>
+            <path d="m3 7 9 6 9-6"/>
+          </svg>
+          <span class="btn-text">联系我</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- ========== 右侧：链接面板 + 栏目 ========== -->
+    <main class="glass panel">
+      <div class="panel-head">
+        <div>
+          <h2 id="panelTitle"></h2>
+          <p  id="panelSubtitle"></p>
+        </div>
+        <div class="badge" id="count">—</div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+      <div class="sections" id="sections"></div>
+    </main>
+
+  </div>
+
+  <script src="js/bg-image.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/click-fx.js"></script>
+  <script src="js/title-fx.js"></script>
+</body>
+</html>
