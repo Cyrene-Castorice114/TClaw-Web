@@ -304,7 +304,6 @@ MIT License © 2026 TClaw
 · Background image API: loliapi
 · Icon service: favicon.im, DuckDuckGo
 · Markdown rendering: marked
-· Inspiration: Apple Liquid Glass, astrbot.app
 
 ---
 
