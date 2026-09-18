@@ -318,7 +318,6 @@ Made with 💜 by TClaw
 ```
 
 
-```markdown
 # TClaw-WebUI
 
 > A Liquid Glass Personal Homepage
@@ -353,9 +352,6 @@ A personal homepage built with vanilla HTML / CSS / JavaScript, featuring a **Li
 ---
 
 ## 🗂 Project Structure
-
-```
-
 personal-homepage/
 ├── index.html              # Main page
 ├── css/
@@ -376,7 +372,6 @@ personal-homepage/
 ├── icons/              # Custom icons
 └── favicon.png         # Site icon (recommended 512×512)
 
-```
 
 ---
 
