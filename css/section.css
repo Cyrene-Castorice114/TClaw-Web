@@ -229,6 +229,8 @@
   font-size: 13px;
   line-height: 1.6;
   color: rgba(255,255,255,.78);
+  min-width: 0;
+  word-break: break-word;
 }
 
 /* =========================================================
@@ -418,7 +420,8 @@
    ========================================================= */
 .projects {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));  /* ★ 300 → 360 */
+  grid-auto-rows: 1fr;                                            /* ★ 新增：同行卡片等高 */
   gap: 14px;
   min-width: 0;
 }
@@ -430,7 +433,10 @@
   gap: 10px;
   padding: 18px 20px 16px;
   border-radius: 20px;
-  overflow: hidden;
+  /* ★ 允许下拉菜单溢出显示 */
+  overflow: visible;
+  /* ★ 占满 grid 单元格高度 */
+  height: 100%;
   background: linear-gradient(155deg, rgba(255,255,255,.10), rgba(255,255,255,.035));
   border: 1px solid rgba(255,255,255,.10);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 4px 16px -8px rgba(0,0,0,.4);
@@ -446,6 +452,7 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity .35s;
+  border-radius: inherit;
   background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 0%),
               rgba(var(--brand-rgb, 255 255 255), .16), transparent 65%);
 }
@@ -468,6 +475,7 @@
   gap: 12px;
   position: relative;
   z-index: 2;
+  flex-wrap: wrap;
 }
 
 .project-name {
@@ -476,6 +484,8 @@
   font-weight: 700;
   color: #fff;
   letter-spacing: .01em;
+  word-break: break-word;
+  min-width: 0;
 }
 
 .project-tags {
@@ -502,6 +512,9 @@
   color: rgba(255,255,255,.58);
   position: relative;
   z-index: 2;
+  word-break: break-word;
+  /* ★ 撑开剩余空间，让按钮沉到底部 */
+  flex: 1;
 }
 
 /* ---------- 项目按钮：胶囊 + 左侧圆形图标 ---------- */
@@ -509,9 +522,22 @@
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
-  margin-top: 6px;
+  /* ★ 自动推到卡片底部 */
+  margin-top: auto;
+  padding-top: 10px;
   position: relative;
   z-index: 2;
+}
+
+/* 所有按钮统一：内容水平居中 */
+.project-actions .project-btn,
+.project-actions .project-dropdown {
+  min-width: 0;
+  justify-content: center;
+}
+
+.project-actions .project-dropdown .project-btn {
+  width: 100%;
 }
 
 .project-btn {
@@ -589,14 +615,15 @@
   position: relative;
 }
 
+/* ★ 下拉菜单：完整显示，不被裁切 */
 .project-dropdown-menu {
   position: absolute;
   bottom: calc(100% + 6px);
   left: 0;
-  min-width: 150px;
+  min-width: 160px;
   padding: 6px;
   border-radius: 12px;
-  background: rgba(20, 22, 32, .96);
+  background: rgba(20, 22, 32, .98);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255,255,255,.14);
@@ -605,7 +632,8 @@
   visibility: hidden;
   transform: translateY(4px);
   transition: opacity .22s ease, visibility .22s ease, transform .22s ease;
-  z-index: 50;
+  z-index: 100;
+  white-space: nowrap;
 }
 
 .project-dropdown.open .project-dropdown-menu {
@@ -769,7 +797,6 @@
 .readme-body > *:first-child { margin-top: 0 !important; }
 .readme-body > *:last-child  { margin-bottom: 0 !important; }
 
-/* 标题 */
 .readme-body h1,
 .readme-body h2,
 .readme-body h3,
@@ -978,7 +1005,7 @@
 }
 
 /* =========================================================
-   手机端：性能优化 + 防止栏目被内容撑开
+   手机端：防偏移 + 自动换行 + 性能优化
    ========================================================= */
 @media (max-width: 900px) {
 
@@ -1011,29 +1038,70 @@
     width: 100%;
   }
 
-  /* 项目卡片单列 */
+  /* 手机端：单列 + 不用等高 */
   .projects {
     grid-template-columns: 1fr;
+    grid-auto-rows: auto;
   }
 
-  /* 友情链接按钮缩窄，只留箭头 */
+  .project-card {
+    height: auto;
+  }
+
+  /* ---------- 文字自动换行 ---------- */
+  .section-card-name,
+  .section-card-desc,
+  .friend-name,
+  .friend-desc,
+  .project-name,
+  .project-desc,
+  .timeline-text {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+    max-width: 100%;
+  }
+
+  /* 友情链接文字区域可换行 */
+  .friend-body {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  /* 友情链接按钮只留箭头 */
   .friend-action {
     padding: 6px 8px;
     min-width: 0;
+    flex-shrink: 0;
   }
   .friend-action .action-text { display: none; }
 
-  /* 项目按钮更紧凑 */
-  .project-actions {
-    gap: 6px;
-  }
+  /* 项目按钮紧凑 */
+  .project-actions { gap: 6px; }
   .project-btn {
     padding: 0 10px 0 4px;
     font-size: 11px;
     min-width: 0;
   }
 
-  /* ---------- 性能优化：关闭玻璃模糊 ---------- */
+  /* 手机端按钮不强制平分 */
+  .project-actions .project-btn,
+  .project-actions .project-dropdown {
+    flex: 0 1 auto !important;
+  }
+
+  /* 时间线：日期和文本竖排 */
+  .timeline-item {
+    flex-direction: column;
+    gap: 2px;
+    padding-left: 22px;
+  }
+  .timeline-date { width: auto; }
+
+  /* ---------- 性能优化 ---------- */
   .section-card,
   .friend-card,
   .project-card,
