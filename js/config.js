@@ -60,6 +60,25 @@ const SECTIONS = [
         ],
         readme: 'https://raw.githubusercontent.com/Cyrene-Castorice114/Capha-Script/main/README.md',
       },
+      {
+        name: 'TClaw_Web',
+        desc: 'TClaw网站源码',
+        tags: ['CSS', 'HTML', 'JS'],
+        color: '60a5fa',
+        sources: [
+          {
+            label:    'GitHub',
+            repo:     'https://github.com/Cyrene-Castorice114/TClaw-Web',
+            download: 'https://github.com/Cyrene-Castorice114/TClaw-Web/archive/refs/heads/main.zip',
+          },
+          {
+            label:    'Gitcode',
+            repo:     'https://gitcode.com/Cyrene-Castorice/TClaw-Web',
+            download: 'https://gitcode.com/Cyrene-Castorice/TClaw-Web/archive/main.zip',
+          },
+        ],
+        readme: 'https://raw.githubusercontent.com/Cyrene-Castorice114/TClaw-Web/main/README.md',
+      },
     ],
   },
 
