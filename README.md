@@ -38,6 +38,7 @@ A personal homepage built with vanilla HTML / CSS / JavaScript, featuring a **Li
 ---
 
 ## 🗂 项目结构 · Project Structure
+```
 personal-homepage/
 ├── index.html              # 主页面 Main page
 ├── css/
@@ -71,7 +72,7 @@ git clone https://github.com/yourname/personal-homepage.git
 cd personal-homepage
 ```
 
-2. 本地预览 · Local Preview
+### 2. 本地预览 · Local Preview
 
 不要直接双击 index.html（部分功能需要 HTTP 服务）。
 Don't open index.html directly (some features require an HTTP server).
@@ -86,7 +87,7 @@ npx serve .
 
 然后浏览器打开 http://localhost:8080。
 
-3. 部署 · Deploy
+### 3. 部署 · Deploy
 
 推荐以下平台（都免费，支持 HTTPS）：
 
@@ -97,11 +98,11 @@ npx serve .
 
 ---
 
-⚙️ 配置说明 · Configuration
+## ⚙️ 配置说明 · Configuration
 
 所有个人内容都集中在 js/config.js，只需要编辑这一个文件。
 
-个人信息 · Profile
+### 个人信息 · Profile
 
 ```js
 const PROFILE = {
@@ -113,7 +114,7 @@ const PROFILE = {
 };
 ```
 
-面板标题 · Panel Title
+### 面板标题 · Panel Title
 
 ```js
 const PANEL = {
@@ -122,7 +123,7 @@ const PANEL = {
 };
 ```
 
-网站卡片 · Site Cards
+### 网站卡片 · Site Cards
 
 ```js
 const SITES = [
@@ -137,7 +138,7 @@ const SITES = [
 ];
 ```
 
-额外栏目 · Sections
+### 额外栏目 · Sections
 
 支持 5 种栏目类型：
 
@@ -167,7 +168,7 @@ list 文字列表 { name, url }
 }
 ```
 
-图标写法 · Icon Formats
+### 图标写法 · Icon Formats
 
 icon 字段支持四种写法：
 
@@ -180,9 +181,9 @@ icon 字段支持四种写法：
 
 ---
 
-🎨 主题定制 · Theming
+## 🎨 主题定制 · Theming
 
-主要颜色 · Main Colors
+### 主要颜色 · Main Colors
 
 编辑 css/style.css 顶部的 CSS 变量：
 
@@ -195,7 +196,7 @@ icon 字段支持四种写法：
 }
 ```
 
-背景色 · Background Color
+### 背景色 · Background Color
 
 ```css
 body { background: #06070c; }
@@ -205,7 +206,7 @@ body { background: #06070c; }
 <meta name="theme-color" content="#06070c">
 ```
 
-极光颜色 · Aurora Colors
+### 极光颜色 · Aurora Colors
 
 在 css/style.css 里改三个 blob：
 
@@ -215,7 +216,7 @@ body { background: #06070c; }
 .b3 { background: #be185d; }  /* 粉色 */
 ```
 
-背景图 API · Background Image API
+### 背景图 API · Background Image API
 
 编辑 js/bg-image.js：
 
@@ -229,7 +230,7 @@ const CONFIG = {
 
 ---
 
-📄 README 阅读器 · README Viewer
+## 📄 README 阅读器 · README Viewer
 
 点击项目的 「文档」 按钮会弹出 Markdown 阅读器。
 
@@ -240,7 +241,7 @@ const CONFIG = {
 
 ---
 
-🎁 彩蛋与特效 · Easter Eggs
+## 🎁 彩蛋与特效 · Easter Eggs
 
 特效 触发
 ✨ 点击飘字 屏幕上任意位置点击
@@ -250,7 +251,7 @@ const CONFIG = {
 
 ---
 
-⚡ 性能优化 · Performance
+## ⚡ 性能优化 · Performance
 
 针对手机端做的优化：
 
@@ -263,7 +264,7 @@ const CONFIG = {
 
 ---
 
-🌐 浏览器支持 · Browser Support
+## 🌐 浏览器支持 · Browser Support
 
 浏览器 支持
 Chrome / Edge (桌面) ✅ 完整
@@ -275,7 +276,7 @@ Safari (iOS) ✅ 完整
 
 ---
 
-⚠️ 已知限制 · Known Limitations
+## ⚠️ 已知限制 · Known Limitations
 
 1. beforeunload 弹窗在移动端被禁用
       手机 Edge / Chrome / Safari 不会显示「确认离开」弹窗，这是浏览器规范限制。
@@ -286,7 +287,7 @@ Safari (iOS) ✅ 完整
 
 ---
 
-🛠 技术栈 · Tech Stack
+## 🛠 技术栈 · Tech Stack
 
 · HTML5 / CSS3 / JavaScript (ES6+) —— 无框架，纯原生
 · marked —— Markdown 渲染
@@ -294,18 +295,17 @@ Safari (iOS) ✅ 完整
 
 ---
 
-📜 开源协议 · License
+## 📜 开源协议 · License
 
 MIT License © 2026 TClaw
 
 ---
 
-💖 致谢 · Credits
+## 💖 致谢 · Credits
 
 · 背景图 API：loliapi
 · 图标服务：favicon.im、DuckDuckGo
 · Markdown 渲染：marked
-· 灵感来源：Apple Liquid Glass、astrbot.app
 
 ---
 
