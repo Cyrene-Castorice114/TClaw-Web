@@ -1,8 +1,10 @@
 /* =========================================================
    particle-fx.js
    ---------------------------------------------------------
-   点击按钮/链接/卡片时，从点击点迸射粒子
+   点击按钮/链接/卡片时，从其方框边缘迸射粒子
+   粒子沿方框四条边分布，垂直向外飞散
    粒子形状：圆形 / 圆角三角形 / 圆角正方形
+   滑屏不触发
    ========================================================= */
 (function () {
   'use strict';
@@ -39,41 +41,57 @@
      3. 配置
      ========================================================= */
   const CONFIG = {
-    countDesktop: 18,
-    countMobile:  12,
+    /* 粒子数量 */
+    countDesktop: 24,      // 桌面端总粒子数
+    countMobile:  16,      // 手机端总粒子数
 
-    speedMin: 3,
-    speedMax: 9,
+    /* 飞散速度 (px/frame) */
+    speedMin: 4,
+    speedMax: 10,
 
+    /* 尺寸 (px) */
     sizeMin: 5,
-    sizeMax: 11,
+    sizeMax: 10,
 
+    /* 生命衰减 (每帧) */
     lifeMin: 0.012,
     lifeMax: 0.026,
 
-    gravity: 0.12,
-    drag:    0.985,
+    /* 物理 */
+    gravity: 0.16,        // 重力
+    drag:    0.985,       // 阻力
 
+    /* 旋转 */
     rotSpeedMin: -0.22,
     rotSpeedMax:  0.22,
 
+    /* 圆角比例 */
     roundness: 0.28,
 
+    /* 发光 */
     glowDesktop: true,
     glowBlur:    10,
 
+    /* 移动端 */
     mobileBreakpoint: 900,
+
+    /* 触摸判定 */
+    moveThreshold: 10,
+    timeThreshold: 700,
+
+    /* 外扩半径：粒子出生点相对边框的偏移 (px) */
+    edgeOffset: 2,
   };
 
   const COLORS = [
-    '#a78bfa',
-    '#c4b5fd',
-    '#f472b6',
-    '#f0abfc',
-    '#60a5fa',
-    '#38bdf8',
-    '#34d399',
-    '#fbbf24',
+    '#a78bfa',  // 紫
+    '#c4b5fd',  // 浅紫
+    '#f472b6',  // 粉
+    '#f0abfc',  // 淡粉
+    '#60a5fa',  // 蓝
+    '#38bdf8',  // 天蓝
+    '#34d399',  // 绿
+    '#fbbf24',  // 琥珀
   ];
 
   const SHAPES = ['circle', 'triangle', 'square'];
@@ -92,35 +110,89 @@
   let rafId = null;
 
   /* =========================================================
-     6. 生成
+     6. 从方框边缘生成粒子
+     ---------------------------------------------------------
+     参数 rect：element.getBoundingClientRect()
+     粒子沿四条边分布，垂直向外飞散
      ========================================================= */
-  function spawn(x, y) {
-    const count = isMobile() ? CONFIG.countMobile : CONFIG.countDesktop;
+  function spawnOnRect(rect) {
+    const total = isMobile() ? CONFIG.countMobile : CONFIG.countDesktop;
 
-    for (let i = 0; i < count; i++) {
-      const baseAngle = (Math.PI * 2 * i) / count;
-      const angle     = baseAngle + rand(-0.4, 0.4);
-      const speed = rand(CONFIG.speedMin, CONFIG.speedMax);
-      const size  = rand(CONFIG.sizeMin, CONFIG.sizeMax);
+    const left   = rect.left;
+    const top    = rect.top;
+    const right  = rect.right;
+    const bottom = rect.bottom;
+    const width  = rect.width;
+    const height = rect.height;
 
-      particles.push({
-        x, y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
+    if (width <= 0 || height <= 0) return;
 
-        size,
-        shape: pick(SHAPES),
-        color: pick(COLORS),
+    /* 按周长比例分配粒子 */
+    const perimeter = 2 * (width + height);
+    const topBottomShare = (2 * width) / perimeter;   // 上下边占总长比例
+    const leftRightShare = (2 * height) / perimeter;  // 左右边占总长比例
 
-        rot:  rand(0, Math.PI * 2),
-        vrot: rand(CONFIG.rotSpeedMin, CONFIG.rotSpeedMax),
+    const topBottomCount = Math.max(4, Math.round(total * topBottomShare));
+    const leftRightCount = Math.max(4, Math.round(total * leftRightShare));
 
-        life: 1,
-        decay: rand(CONFIG.lifeMin, CONFIG.lifeMax),
-      });
+    /* ---- 上边：粒子朝上 ---- */
+    const topCount = Math.ceil(topBottomCount / 2);
+    for (let i = 0; i < topCount; i++) {
+      const x = left + Math.random() * width;
+      const y = top - CONFIG.edgeOffset;
+      spawnParticle(x, y, -Math.PI / 2);
+    }
+
+    /* ---- 下边：粒子朝下 ---- */
+    const bottomCount = Math.floor(topBottomCount / 2);
+    for (let i = 0; i < bottomCount; i++) {
+      const x = left + Math.random() * width;
+      const y = bottom + CONFIG.edgeOffset;
+      spawnParticle(x, y, Math.PI / 2);
+    }
+
+    /* ---- 左边：粒子朝左 ---- */
+    const leftCount = Math.ceil(leftRightCount / 2);
+    for (let i = 0; i < leftCount; i++) {
+      const x = left - CONFIG.edgeOffset;
+      const y = top + Math.random() * height;
+      spawnParticle(x, y, Math.PI);
+    }
+
+    /* ---- 右边：粒子朝右 ---- */
+    const rightCount = Math.floor(leftRightCount / 2);
+    for (let i = 0; i < rightCount; i++) {
+      const x = right + CONFIG.edgeOffset;
+      const y = top + Math.random() * height;
+      spawnParticle(x, y, 0);
     }
 
     if (!rafId) rafId = requestAnimationFrame(tick);
+  }
+
+  /* 生成单个粒子：baseAngle 是主方向 */
+  function spawnParticle(x, y, baseAngle) {
+    /* 方向带 ±35° 随机偏角，看起来更自然 */
+    const angle = baseAngle + rand(-0.6, 0.6);
+
+    const speed = rand(CONFIG.speedMin, CONFIG.speedMax);
+    const size  = rand(CONFIG.sizeMin, CONFIG.sizeMax);
+
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+
+      size,
+      shape: pick(SHAPES),
+      color: pick(COLORS),
+
+      rot:  rand(0, Math.PI * 2),
+      vrot: rand(CONFIG.rotSpeedMin, CONFIG.rotSpeedMax),
+
+      life: 1,
+      decay: rand(CONFIG.lifeMin, CONFIG.lifeMax),
+    });
   }
 
   /* =========================================================
@@ -274,6 +346,17 @@
     '.leave-btn',
   ].join(',');
 
+  /* =========================================================
+     10. 点击 / 滑动判定
+     ---------------------------------------------------------
+     记录 pointerdown 的目标元素、位置、时间
+     pointerup 时比对：
+       · 位移 < moveThreshold → 是点击
+       · 时间 < timeThreshold → 不是长按
+     满足后从目标元素方框边缘迸射粒子
+     ========================================================= */
+  let pointerStart = null;
+
   document.addEventListener('pointerdown', (e) => {
     if (e.button !== undefined && e.button !== 0) return;
     if (e.isPrimary === false) return;
@@ -281,14 +364,50 @@
     const target = e.target.closest(TRIGGER_SELECTOR);
     if (!target) return;
 
-    spawn(e.clientX, e.clientY);
+    pointerStart = {
+      x:      e.clientX,
+      y:      e.clientY,
+      time:   performance.now(),
+      id:     e.pointerId,
+      target: target,        // 保存目标元素
+    };
+  }, { passive: true });
+
+  document.addEventListener('pointerup', (e) => {
+    if (!pointerStart) return;
+    if (e.pointerId !== pointerStart.id) return;
+
+    const dx = e.clientX - pointerStart.x;
+    const dy = e.clientY - pointerStart.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const dt   = performance.now() - pointerStart.time;
+    const target = pointerStart.target;
+
+    pointerStart = null;
+
+    /* 滑动 → 不触发 */
+    if (dist > CONFIG.moveThreshold) return;
+
+    /* 长按 → 不触发 */
+    if (dt > CONFIG.timeThreshold) return;
+
+    /* 从目标元素方框边缘迸射 */
+    if (target && target.isConnected) {
+      const rect = target.getBoundingClientRect();
+      spawnOnRect(rect);
+    }
+  }, { passive: true });
+
+  /* 手势被中断 → 清空状态 */
+  document.addEventListener('pointercancel', () => {
+    pointerStart = null;
   }, { passive: true });
 
   /* =========================================================
-     10. 调试接口
+     11. 调试接口
      ========================================================= */
   window.ParticleFX = {
-    spawn,
+    spawnOnRect,
     get count() { return particles.length; },
     get canvas() { return canvas; },
   };

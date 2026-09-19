@@ -74,7 +74,7 @@ const SECTIONS = [
           {
             label:    'Gitcode',
             repo:     'https://gitcode.com/Cyrene-Castorice/TClaw-Web',
-            download: 'https://gitcode.com/Cyrene-Castorice/TClaw-Web/archive/main.zip',
+            download: 'https://raw.gitcode.com/Cyrene-Castorice/TClaw-Web/archive/refs/heads/1.0.1.zip',
           },
         ],
         readme: 'https://raw.githubusercontent.com/Cyrene-Castorice114/TClaw-Web/main/README.md',

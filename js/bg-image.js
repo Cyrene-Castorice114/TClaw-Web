@@ -4,6 +4,7 @@
    · 宽度 ≥ 1024px → /acg/pc（横图）
    · 宽度 < 1024px → /acg/pe（竖图）
    · 手机端不用 kenburns 动画（省 GPU）
+   · 请求结束后主动释放，防止浏览器一直转圈
    ========================================================= */
 (function () {
   'use strict';
@@ -73,10 +74,12 @@
 
       const probe = new Image();
       let done = false;
+
       const timer = setTimeout(() => {
         if (done) return;
         done = true;
         warn(`超时 (${CONFIG.timeout}ms)`);
+        probe.src = '';       // ★ 主动断开挂住的请求
         retry();
       }, CONFIG.timeout);
 
@@ -84,11 +87,13 @@
         if (done) return;
         done = true;
         clearTimeout(timer);
+
         const w = probe.naturalWidth;
         log(`✅ ${w}×${probe.naturalHeight}`);
 
         if (w && w < CONFIG.minPixels) {
           warn(`图片太小 (${w}px)，丢弃重试`);
+          probe.src = '';     // ★ 主动释放
           retry();
           return;
         }
@@ -97,6 +102,8 @@
         void imgLayer.offsetWidth;
         imgLayer.classList.add('loaded');
         log('🎉 背景已应用');
+
+        probe.src = '';       // ★ 主动释放，断开请求
         finish();
       };
 
@@ -105,6 +112,7 @@
         done = true;
         clearTimeout(timer);
         warn('❌ 加载失败');
+        probe.src = '';       // ★ 主动释放
         retry();
       };
 
