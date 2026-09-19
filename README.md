@@ -91,10 +91,10 @@ npx serve .
 
 推荐以下平台（都免费，支持 HTTPS）：
 
-· Vercel
-· Netlify
-· Cloudflare Pages
-· GitHub Pages
+ - Vercel
+ - Netlify
+ - Cloudflare Pages
+ - GitHub Pages
 
 ---
 
@@ -252,10 +252,10 @@ const CONFIG = {
 
 点击项目的 「文档」 按钮会弹出 Markdown 阅读器。
 
-· 自动推导 GitHub 镜像（jsDelivr / ghproxy / gitmirror 等）
-· 多源依次尝试，直到成功
-· 支持 GFM（表格、任务列表、代码块）
-· 若 marked 加载失败，自动降级为纯文本
+ - 自动推导 GitHub 镜像（jsDelivr / ghproxy / gitmirror 等）
+ - 多源依次尝试，直到成功
+ - 支持 GFM（表格、任务列表、代码块）
+ - 若 marked 加载失败，自动降级为纯文本
 
 ---
 
@@ -276,14 +276,14 @@ const CONFIG = {
 
 针对手机端做的优化：
 
-· 关闭 backdrop-filter —— 改用半透明深色背景
-· 关闭极光动画 —— 减少 GPU 负载
-· 关闭 Ken Burns 缩放 —— 背景图静态显示
-· 图标并发/串行加载 —— 手机端并发 6，桌面端并发 10
-· 飘字数量减少 —— 手机端最多 6 条，间隔 120ms
-· min-width: 0 —— 防止 flex 子项撑开导致布局偏移
-· 粒子数量减少 —— 手机端 12 个，桌面端 18 个
-· 粒子关闭发光 —— 手机端不加 shadowBlur
+ - 关闭 backdrop-filter —— 改用半透明深色背景
+ - 关闭极光动画 —— 减少 GPU 负载
+ - 关闭 Ken Burns 缩放 —— 背景图静态显示
+ - 图标并发/串行加载 —— 手机端并发 6，桌面端并发 10
+ - 飘字数量减少 —— 手机端最多 6 条，间隔 120ms
+ - min-width: 0 —— 防止 flex 子项撑开导致布局偏移
+ - 粒子数量减少 —— 手机端 12 个，桌面端 18 个
+ - 粒子关闭发光 —— 手机端不加 shadowBlur
 
 ---
 
@@ -313,11 +313,11 @@ const CONFIG = {
 
 ## 🛠 技术栈 · Tech Stack
 
-· HTML5 / CSS3 / JavaScript (ES6+) —— 无框架，纯原生
-· marked —— Markdown 渲染
-· Fetch API —— 原生浏览器 API
-· HTML5 / CSS3 / JavaScript (ES6+) —— 无框架，纯原生
-· Canvas 2D —— 粒子特效渲染
+ - HTML5 / CSS3 / JavaScript (ES6+) —— 无框架，纯原生
+ - marked —— Markdown 渲染
+ - Fetch API —— 原生浏览器 API
+ - HTML5 / CSS3 / JavaScript (ES6+) —— 无框架，纯原生
+ - Canvas 2D —— 粒子特效渲染
 
 ---
 
@@ -329,9 +329,9 @@ MIT License © 2026 TClaw
 
 ## 💖 致谢 · Credits
 
-· 背景图 API：loliapi
-· 图标服务：favicon.im、DuckDuckGo
-· Markdown 渲染：marked
+ - 背景图 API：loliapi
+ - 图标服务：favicon.im、DuckDuckGo
+ - Markdown 渲染：marked
 
 ---
 
