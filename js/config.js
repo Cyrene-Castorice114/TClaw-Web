@@ -69,7 +69,7 @@ const SECTIONS = [
           {
             label:    'GitHub',
             repo:     'https://github.com/Cyrene-Castorice114/TClaw-Web',
-            download: 'https://github.com/Cyrene-Castorice114/TClaw-Web/archive/refs/heads/main.zip',
+            download: 'https://github.com/Cyrene-Castorice114/TClaw-Web/releases/latest/download/TClaw_web.zip'
           },
           {
             label:    'Gitcode',
