@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 
-[English →](https://github.com/Cyrene-Castorice114/TClaw-Web/raw/en/README.md)
+- [English] (https://github.com/Cyrene-Castorice114/TClaw-Web/blob/en/README.md)
 ---
 
 ## 📖 简介 · Introduction
@@ -228,6 +228,24 @@ const CONFIG = {
 };
 ```
 
+### 粒子效果 · Particle Effect
+
+编辑 js/particle-fx.js 顶部的 CONFIG：
+
+```js
+const CONFIG = {
+  countDesktop: 18,     // 桌面端粒子数
+  countMobile:  12,     // 手机端粒子数
+  speedMin: 3,          // 最小速度
+  speedMax: 9,          // 最大速度
+  sizeMin: 5,           // 最小尺寸
+  sizeMax: 11,          // 最大尺寸
+  gravity: 0.12,        // 重力
+  roundness: 0.28,      // 圆角比例
+  glowDesktop: true,    // 桌面端发光
+};
+```
+
 ---
 
 ## 📄 README 阅读器 · README Viewer
@@ -243,11 +261,14 @@ const CONFIG = {
 
 ## 🎁 彩蛋与特效 · Easter Eggs
 
-特效 触发
-✨ 点击飘字 屏幕上任意位置点击
-🏷️ 标签页标题 切换标签
-🎨 背景图随机 每次刷新页面
-📖 README 阅读器 点击项目卡片上的「文档」
+| 特效 | 触发 |
+| --- | --- |
+| ✨ 点击飘字 | 屏幕上任意位置点击 |
+| 🏷️ 标签页标题 | 切换标签 |
+|🎨 背景图随机 | 每次刷新页面 |
+| 📖 README 阅读器 | 点击项目卡片上的「文档」 |
+| 🎆 粒子迸射 | 点击按钮 / 卡片 / 链接 |
+| 🐙 GitHub 悬浮按钮 | 鼠标悬停右下角按钮 |
 
 ---
 
@@ -261,18 +282,21 @@ const CONFIG = {
 · 图标并发/串行加载 —— 手机端并发 6，桌面端并发 10
 · 飘字数量减少 —— 手机端最多 6 条，间隔 120ms
 · min-width: 0 —— 防止 flex 子项撑开导致布局偏移
+· 粒子数量减少 —— 手机端 12 个，桌面端 18 个
+· 粒子关闭发光 —— 手机端不加 shadowBlur
 
 ---
 
 ## 🌐 浏览器支持 · Browser Support
 
-浏览器 支持
-Chrome / Edge (桌面) ✅ 完整
-Firefox (桌面) ✅ 完整
-Safari (macOS) ✅ 完整
-Chrome / Edge (手机) ✅ 完整
-Safari (iOS) ✅ 完整
-旧版 IE ❌ 不支持
+| 浏览器 | 支持 |
+| --- | --- |
+| Chrome / Edge (桌面) | ✅ 完整 |
+| Firefox (桌面) | ✅ 完整 |
+| Safari (macOS) | ✅ 完整 |
+| Chrome / Edge (手机) | ✅ 完整 |
+| Safari (iOS) | ✅ 完整 |
+| 旧版 IE ❌ | 不支持 |
 
 ---
 
@@ -292,6 +316,8 @@ Safari (iOS) ✅ 完整
 · HTML5 / CSS3 / JavaScript (ES6+) —— 无框架，纯原生
 · marked —— Markdown 渲染
 · Fetch API —— 原生浏览器 API
+· HTML5 / CSS3 / JavaScript (ES6+) —— 无框架，纯原生
+· Canvas 2D —— 粒子特效渲染
 
 ---
 
@@ -317,4 +343,3 @@ If this project helps you, please give it a ⭐ ~
 Made with 💜 by TClaw
 
 </div>
-```
