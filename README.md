@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 
-- [English] (https://github.com/Cyrene-Castorice114/TClaw-Web/blob/en/README.md)
+[English](https://github.com/Cyrene-Castorice114/TClaw-Web/blob/en/README.md)
 ---
 
 ## 📖 简介 · Introduction
@@ -265,7 +265,7 @@ const CONFIG = {
 | --- | --- |
 | ✨ 点击飘字 | 屏幕上任意位置点击 |
 | 🏷️ 标签页标题 | 切换标签 |
-|🎨 背景图随机 | 每次刷新页面 |
+| 🎨 背景图随机 | 每次刷新页面 |
 | 📖 README 阅读器 | 点击项目卡片上的「文档」 |
 | 🎆 粒子迸射 | 点击按钮 / 卡片 / 链接 |
 | 🐙 GitHub 悬浮按钮 | 鼠标悬停右下角按钮 |
@@ -296,7 +296,7 @@ const CONFIG = {
 | Safari (macOS) | ✅ 完整 |
 | Chrome / Edge (手机) | ✅ 完整 |
 | Safari (iOS) | ✅ 完整 |
-| 旧版 IE ❌ | 不支持 |
+| 旧版 IE | ❌ 不支持 |
 
 ---
 
