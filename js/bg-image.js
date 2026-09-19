@@ -1,10 +1,10 @@
 /* =========================================================
-   背景图加载 —— 自动区分电脑端 / 手机端 API
+   bg-image.js
    ---------------------------------------------------------
-   · 宽度 ≥ 1024px → /acg/pc（横图）
-   · 宽度 < 1024px → /acg/pe（竖图）
-   · 手机端不用 kenburns 动画（省 GPU）
-   · 请求结束后主动释放，防止浏览器一直转圈
+   · 自动区分电脑端 / 手机端 API
+   · localStorage 缓存（6 小时换一次）
+   · API 失败 → 本地兜底图
+   · 请求结束主动释放，不挂住浏览器
    ========================================================= */
 (function () {
   'use strict';
@@ -13,12 +13,22 @@
     api:        'https://www.loliapi.com/acg/pc',
     mobileApi:  'https://www.loliapi.com/acg/pe',
     breakpoint: 1024,
-    cacheBust:  false,
     timeout:    8000,
     retries:    1,
     minPixels:  200,
     kenBurns:   true,
     debug:      true,
+
+    /* 缓存 */
+    cacheKey:   'tclaw_bg_cache_v1',
+    cacheTTL:   6 * 60 * 60 * 1000,   // 6 小时
+
+    /* 本地兜底（如果 API 全挂） */
+    fallbacks: [
+      'assets/bg/fallback-1.jpg',
+      'assets/bg/fallback-2.jpg',
+      'assets/bg/fallback-3.jpg',
+    ],
   };
 
   const log  = (...a) => CONFIG.debug && console.log('[bg]', ...a);
@@ -33,6 +43,7 @@
   function boot() {
     const isMobile = window.innerWidth < CONFIG.breakpoint;
 
+    /* ---- DOM ---- */
     const imgLayer = document.createElement('div');
     const useKenBurns = CONFIG.kenBurns && !isMobile;
     imgLayer.className = 'bg-image' + (useKenBurns ? ' kenburns' : '');
@@ -50,26 +61,46 @@
       resolveBg();
     }
 
-    setTimeout(finish, CONFIG.timeout * (CONFIG.retries + 1) + 1500);
-
-    function pickApi() {
-      const isM = window.innerWidth < CONFIG.breakpoint;
-      const api = isM ? CONFIG.mobileApi : CONFIG.api;
-      log(`宽度 ${window.innerWidth}px → ${isM ? '手机端' : '电脑端'} API`);
-      return api;
+    /* ---- 应用背景 ---- */
+    function apply(url) {
+      imgLayer.style.backgroundImage = `url("${url}")`;
+      void imgLayer.offsetWidth;
+      imgLayer.classList.add('loaded');
+      log('🎉 背景已应用:', url);
     }
 
-    function buildUrl() {
-      const base = pickApi();
-      if (!CONFIG.cacheBust) return base;
-      const sep = base.includes('?') ? '&' : '?';
-      return base + sep + '_t=' + Date.now();
+    /* ---- 1. 检查缓存 ---- */
+    try {
+      const raw = localStorage.getItem(CONFIG.cacheKey);
+      if (raw) {
+        const cached = JSON.parse(raw);
+        if (cached && cached.url && Date.now() - cached.time < CONFIG.cacheTTL) {
+          log('命中缓存:', cached.url);
+
+          /* 缓存图预加载后应用 */
+          const img = new Image();
+          img.onload = () => { apply(cached.url); finish(); };
+          img.onerror = () => {
+            warn('缓存图失效，重新拉取');
+            localStorage.removeItem(CONFIG.cacheKey);
+            load();
+          };
+          img.src = cached.url;
+          return;
+        }
+      }
+    } catch (e) { /* ignore */ }
+
+    /* ---- 2. 从 API 加载 ---- */
+    function pickApi() {
+      const isM = window.innerWidth < CONFIG.breakpoint;
+      return isM ? CONFIG.mobileApi : CONFIG.api;
     }
 
     let attempt = 0;
     function load() {
       attempt++;
-      const url = buildUrl();
+      const url = pickApi();
       log(`第 ${attempt} 次加载:`, url);
 
       const probe = new Image();
@@ -79,7 +110,7 @@
         if (done) return;
         done = true;
         warn(`超时 (${CONFIG.timeout}ms)`);
-        probe.src = '';       // ★ 主动断开挂住的请求
+        probe.src = '';
         retry();
       }, CONFIG.timeout);
 
@@ -93,17 +124,21 @@
 
         if (w && w < CONFIG.minPixels) {
           warn(`图片太小 (${w}px)，丢弃重试`);
-          probe.src = '';     // ★ 主动释放
+          probe.src = '';
           retry();
           return;
         }
 
-        imgLayer.style.backgroundImage = `url("${url}")`;
-        void imgLayer.offsetWidth;
-        imgLayer.classList.add('loaded');
-        log('🎉 背景已应用');
+        apply(url);
 
-        probe.src = '';       // ★ 主动释放，断开请求
+        /* 存缓存 */
+        try {
+          localStorage.setItem(CONFIG.cacheKey, JSON.stringify({
+            url, time: Date.now(),
+          }));
+        } catch (e) { /* ignore */ }
+
+        probe.src = '';
         finish();
       };
 
@@ -112,7 +147,7 @@
         done = true;
         clearTimeout(timer);
         warn('❌ 加载失败');
-        probe.src = '';       // ★ 主动释放
+        probe.src = '';
         retry();
       };
 
@@ -121,21 +156,42 @@
 
     function retry() {
       if (attempt >= CONFIG.retries) {
-        warn(`已重试 ${CONFIG.retries} 次，放弃`);
-        finish();
+        warn(`已重试 ${CONFIG.retries} 次，使用本地兜底`);
+        useFallback();
         return;
       }
       setTimeout(load, 400 * attempt);
     }
 
+    /* ---- 3. 本地兜底 ---- */
+    function useFallback() {
+      const list = CONFIG.fallbacks;
+      if (!list.length) { finish(); return; }
+
+      const url = list[(Math.random() * list.length) | 0];
+      log('使用本地兜底:', url);
+
+      const img = new Image();
+      img.onload = () => { apply(url); finish(); };
+      img.onerror = () => { warn('本地兜底也失败了'); finish(); };
+      img.src = url;
+    }
+
+    /* 硬超时兜底 */
+    setTimeout(finish, CONFIG.timeout * (CONFIG.retries + 1) + 1500);
+
     load();
 
     window.BgImage = {
       reload: () => {
+        try { localStorage.removeItem(CONFIG.cacheKey); } catch (e) {}
         attempt = 0;
         settled = false;
         window.__bgDone = false;
         load();
+      },
+      clearCache: () => {
+        try { localStorage.removeItem(CONFIG.cacheKey); } catch (e) {}
       },
       config: CONFIG,
     };

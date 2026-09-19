@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#06070c">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="dark light">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TClaw">
@@ -12,21 +12,48 @@
   <meta name="format-detection" content="telephone=no">
   <title>TClaw-WebUI</title>
 
+  <!-- SEO -->
+  <meta name="description" content="TClaw 的个人主页 - 液态玻璃风格，集成开源项目、友情链接、社交账号。">
+  <meta name="keywords" content="TClaw, 个人主页, 液态玻璃, 开源, GitHub">
+  <meta name="author" content="TClaw">
+  <link rel="canonical" href="https://github.com/Cyrene-Castorice114/TClaw-Web">
+
+  <!-- Open Graph (微信 / QQ / Discord 分享) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TClaw-WebUI">
+  <meta property="og:description" content="液态玻璃风格个人主页">
+  <meta property="og:image" content="assets/favicon.png">
+  <meta property="og:url" content="https://github.com/Cyrene-Castorice114/TClaw-Web">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TClaw-WebUI">
+  <meta name="twitter:description" content="液态玻璃风格个人主页">
+  <meta name="twitter:image" content="assets/favicon.png">
+
+  <!-- 预连接 -->
   <link rel="preconnect" href="https://www.loliapi.com" crossorigin>
   <link rel="preconnect" href="https://favicon.im" crossorigin>
   <link rel="preconnect" href="https://icons.duckduckgo.com" crossorigin>
+
+  <!-- 图标 -->
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="apple-touch-icon" href="assets/favicon.png">
 
-  <!-- Markdown 解析库 -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Markdown 本地版（不依赖 CDN） -->
+  <script src="js/vendor/marked.min.js"></script>
+
+  <!-- ★ 主题脚本放在最前，防止闪烁 -->
+  <script src="js/theme.js?v=6"></script>
 
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/click-fx.css">
   <link rel="stylesheet" href="css/bg-image.css">
   <link rel="stylesheet" href="css/loading.css">
   <link rel="stylesheet" href="css/section.css">
-  <link rel="stylesheet" href="css/particle-fx.css?v=3">
+  <link rel="stylesheet" href="css/particle-fx.css?v=6">
+  <link rel="stylesheet" href="css/skeleton.css?v=6">
+  <link rel="stylesheet" href="css/theme.css?v=6">
 </head>
 <body>
 
@@ -105,11 +132,23 @@
     <span class="github-fab-tip">在GitHub上查看源码</span>
   </a>
 
-  <script src="js/bg-image.js?v=3"></script>
-  <script src="js/config.js?v=3"></script>
-  <script src="js/main.js?v=3"></script>
-  <script src="js/click-fx.js?v=3"></script>
-  <script src="js/title-fx.js?v=3"></script>
-  <script src="js/particle-fx.js?v=3"></script>
+  <!-- ========== 核心模块（顺序不能乱） ========== -->
+  <script src="js/config.js?v=6"></script>
+  <script src="js/utils.js?v=6"></script>
+  <script src="js/loading.js?v=6"></script>
+  <script src="js/icons.js?v=6"></script>
+  <script src="js/render.js?v=6"></script>
+  <script src="js/readme.js?v=6"></script>
+
+  <!-- ========== 主流程 ========== -->
+  <script src="js/app.js?v=6"></script>
+
+  <!-- ========== 特效（分开加载） ========== -->
+  <script src="js/click-fx.js?v=6"></script>
+  <script src="js/title-fx.js?v=6"></script>
+  <script src="js/particle-fx.js?v=6"></script>
+
+  <!-- ========== 背景图 ========== -->
+  <script src="js/bg-image.js?v=6"></script>
 </body>
 </html>
