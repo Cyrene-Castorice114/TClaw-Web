@@ -7,14 +7,11 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-
-
-[中文 →](https://github.com/Cyrene-Castorice114/TClaw-Web/raw/main/README.md)
 ---
 
 ## 📖 Introduction
 
-A personal homepage built with vanilla HTML / CSS / JavaScript, featuring a **Liquid Glass** aesthetic. It uses a split-pane layout on desktop, and integrates a dynamic background, link cards, open-source project showcase, friend links, a README viewer, click text effects, and tab title effects.
+A personal homepage built with vanilla HTML / CSS / JavaScript, featuring a **Liquid Glass** aesthetic. Split-pane layout on desktop, with background images, link cards, open-source project showcase, friend links, a README viewer, click text effects, and tab title effects.
 
 ---
 
@@ -24,40 +21,38 @@ A personal homepage built with vanilla HTML / CSS / JavaScript, featuring a **Li
 | --- | --- |
 | 🪟 **Liquid Glass UI** | Frosted glass with gradient border and top highlight |
 | 📱 **Responsive Layout** | Desktop split-pane / mobile single column |
-| 🖼️ **Dynamic Background** | Random images from loliapi, landscape on PC, portrait on mobile |
-| 🔗 **Auto Icons** | Site favicon → favicon.im fallback |
-| 📂 **Multi-sections** | Projects / tags / friends / timeline / list |
-| 📄 **README Viewer** | Multi-source auto-switch + Markdown rendering |
-| ✨ **Click Text Effects** | Random text pops up when clicking anywhere |
-| 🏷️ **Tab Title Effects** | Title changes on tab switch |
-| ⚡ **Performance** | Mobile disables blur effects, controlled icon concurrency |
+| 🖼️ **Dynamic Background** | Random images from loliapi (landscape for PC, portrait for mobile) |
+| 🔗 **Auto Icons** | Site's own favicon → favicon.im fallback |
+| 📂 **Multiple Section Types** | Open source projects / skills / friend links / timeline / lists |
+| 📄 **README Viewer** | Multi-source auto-switching + Markdown rendering |
+| ✨ **Click Text Effect** | Random text appears on screen click |
+| 🏷️ **Tab Title Effect** | Title changes when switching tabs |
+| ⚡ **Performance Optimizations** | Disables blur effects on mobile, controls icon loading concurrency |
 
 ---
 
 ## 🗂 Project Structure
 
 ```
-
 personal-homepage/
 ├── index.html              # Main page
 ├── css/
-│   ├── style.css           # Main styles (glass effect)
+│   ├── style.css           # Main styles (including glass effects)
 │   ├── section.css         # Section styles
 │   ├── bg-image.css        # Background image styles
-│   ├── click-fx.css        # Click effect
-│   └── loading.css         # Loading screen
+│   ├── click-fx.css        # Click effect styles
+│   └── loading.css         # Loading page styles
 ├── js/
-│   ├── config.js           # ★ Personal config (main file to edit)
+│   ├── config.js           # ★ Personal configuration (main file to edit)
 │   ├── main.js             # Rendering logic
-│   ├── bg-image.js         # Background loader
-│   ├── click-fx.js         # Click effect
-│   └── title-fx.js         # Title effect
+│   ├── bg-image.js         # Background image loading
+│   ├── click-fx.js         # Click effects
+│   └── title-fx.js         # Title effects
 └── assets/
 ├── avatar/
 │   └── avatar.jpg      # Avatar
 ├── icons/              # Custom icons
 └── favicon.png         # Site icon (recommended 512×512)
-
 ```
 
 ---
@@ -73,7 +68,7 @@ cd personal-homepage
 
 ### 2. Local Preview
 
-Don't open index.html directly (some features require an HTTP server).
+Do not open `index.html` directly (some features require an HTTP server).
 
 ```bash
 # Python 3
@@ -87,18 +82,18 @@ Then open http://localhost:8080 in your browser.
 
 ### 3. Deploy
 
-Recommended platforms (all free, HTTPS supported):
+Recommended platforms (all free, support HTTPS):
 
-· Vercel
-· Netlify
-· Cloudflare Pages
-· GitHub Pages
+- Vercel
+- Netlify
+- Cloudflare Pages
+- GitHub Pages
 
 ---
 
 ## ⚙️ Configuration
 
-All personal content lives in js/config.js — you only need to edit this file.
+All personal content is centralized in `js/config.js` — you only need to edit this one file.
 
 ### Profile
 
@@ -106,8 +101,8 @@ All personal content lives in js/config.js — you only need to edit this file.
 const PROFILE = {
   avatar: 'assets/avatar/avatar.jpg',  // Avatar path
   name:   'Your Name',                 // Display name
-  role:   'Job / Tagline',             // Subtitle
-  bio:    'Short bio',                 // Bio (supports line breaks)
+  role:   'Position / Tag',            // Subtitle
+  bio:    'Personal bio',              // Bio (supports line breaks)
   email:  'you@example.com',           // Email
 };
 ```
@@ -116,7 +111,7 @@ const PROFILE = {
 
 ```js
 const PANEL = {
-  title:    'Find me here',       // Main title
+  title:    'Links to find me',   // Main title
   subtitle: 'Nice to meet you~',  // Subtitle
 };
 ```
@@ -136,18 +131,19 @@ const SITES = [
 ];
 ```
 
-### Sections
+### Extra Sections
 
-5 section types are supported:
+Supports 5 section types:
 
-type Description items format
-cards Card grid { name, desc, url, icon?, color? }
-projects Open-source repos { name, desc, tags?, color?, sources[], readme? }
-friends Friend links { name, desc, url, color?, icon? }
-tags Tag pills ['JavaScript', 'Vue', ...]
-list Text list { name, url }
+| type | Description | items format |
+| --- | --- | --- |
+| cards | Card grid | `{ name, desc, url, icon?, color? }` |
+| projects | Open-source projects | `{ name, desc, tags?, color?, sources[], readme? }` |
+| friends | Friend links | `{ name, desc, url, color?, icon? }` |
+| tags | Tag pills | `['JavaScript', 'Vue', ...]` |
+| list | Text list | `{ name, url }` |
 
-Example of a project item:
+Open-source project example:
 
 ```js
 {
@@ -168,14 +164,15 @@ Example of a project item:
 
 ### Icon Formats
 
-The icon field supports 4 formats:
+The `icon` field supports four formats:
 
-Format Result
-'github.png' assets/icons/github.png
-'assets/custom/xxx.png' Relative path
-'https://example.com/icon.png' Full URL
-'data:image/svg+xml,...' Inline SVG
-Omitted Auto-fetch favicon
+| Format | Result |
+| --- | --- |
+| `'github.png'` | `assets/icons/github.png` |
+| `'assets/custom/xxx.png'` | Relative path |
+| `'https://example.com/icon.png'` | Full URL |
+| `'data:image/svg+xml,...'` | Inline SVG |
+| _(not set)_ | Auto-fetch favicon |
 
 ---
 
@@ -183,7 +180,7 @@ Omitted Auto-fetch favicon
 
 ### Main Colors
 
-Edit the CSS variables at the top of css/style.css:
+Edit the CSS variables at the top of `css/style.css`:
 
 ```css
 :root {
@@ -206,17 +203,17 @@ body { background: #06070c; }
 
 ### Aurora Colors
 
-Change the 3 blob elements in css/style.css:
+Edit the three blobs in `css/style.css`:
 
 ```css
 .b1 { background: #5b21b6; }  /* Purple */
-.b2 { background: #0e7490; }  /* Cyan   */
-.b3 { background: #be185d; }  /* Pink   */
+.b2 { background: #0e7490; }  /* Cyan */
+.b3 { background: #be185d; }  /* Pink */
 ```
 
 ### Background Image API
 
-Edit js/bg-image.js:
+Edit `js/bg-image.js`:
 
 ```js
 const CONFIG = {
@@ -226,70 +223,92 @@ const CONFIG = {
 };
 ```
 
+### Particle Effect
+
+Edit the `CONFIG` at the top of `js/particle-fx.js`:
+
+```js
+const CONFIG = {
+  countDesktop: 18,     // Particle count on desktop
+  countMobile:  12,     // Particle count on mobile
+  speedMin: 3,          // Min speed
+  speedMax: 9,          // Max speed
+  sizeMin: 5,           // Min size
+  sizeMax: 11,          // Max size
+  gravity: 0.12,        // Gravity
+  roundness: 0.28,      // Roundness ratio
+  glowDesktop: true,    // Glow on desktop
+};
+```
+
 ---
 
 ## 📄 README Viewer
 
-Click the "Docs" button on a project card to open the Markdown viewer.
+Click the 「Docs」 button on a project to open the Markdown viewer.
 
-· Auto-derives GitHub mirrors (jsDelivr / ghproxy / gitmirror, etc.)
-· Tries sources in order until success
-· Supports GFM (tables, task lists, code blocks)
-· Falls back to plain text if marked fails to load
+- Automatically resolves GitHub mirrors (jsDelivr / ghproxy / gitmirror, etc.)
+- Tries multiple sources in sequence until one succeeds
+- Supports GFM (tables, task lists, code blocks)
+- Gracefully falls back to plain text if `marked` fails to load
 
 ---
 
-## 🎁 Easter Eggs
+## 🎁 Easter Eggs & Effects
 
-Effect Trigger
-✨ Click text Click anywhere on the screen
-🏷️ Tab title Switch tab
-🎨 Random background Refresh the page
-📖 README viewer Click "Docs" on a project card
+| Effect | Trigger |
+| --- | --- |
+| ✨ Click text | Click anywhere on the screen |
+| 🏷️ Tab title | Switch tabs |
+| 🎨 Random background | Refresh the page |
+| 📖 README viewer | Click 「Docs」 on a project card |
+| 🎆 Particle burst | Click a button / card / link |
+| 🐙 GitHub hover button | Hover over the button at the bottom right |
 
 ---
 
 ## ⚡ Performance
 
-Mobile optimizations:
+Optimizations for mobile:
 
-· Disabled backdrop-filter — replaced with dark semi-transparent background
-· Disabled aurora animations — reduces GPU load
-· Disabled Ken Burns zoom — static background
-· Icon concurrency — 6 on mobile, 10 on desktop
-· Fewer click texts — max 6 on mobile with 120ms interval
-· min-width: 0 — prevents flex items from overflowing
+- Disables `backdrop-filter` — replaced with semi-transparent dark background
+- Disables aurora animation — reduces GPU load
+- Disables Ken Burns zoom — background image stays static
+- Icon loading concurrency (6 on mobile, 10 on desktop)
+- Reduces floating text (max 6 on mobile, 120ms interval)
+- `min-width: 0` — prevents flex children from overflowing
+- Reduces particle count (12 on mobile, 18 on desktop)
+- Disables particle glow on mobile (no `shadowBlur`)
 
 ---
 
 ## 🌐 Browser Support
 
-Browser Support
-Chrome / Edge (Desktop) ✅ Full
-Firefox (Desktop) ✅ Full
-Safari (macOS) ✅ Full
-Chrome / Edge (Mobile) ✅ Full
-Safari (iOS) ✅ Full
-Legacy IE ❌ Not supported
+| Browser | Support |
+| --- | --- |
+| Chrome / Edge (desktop) | ✅ Full |
+| Firefox (desktop) | ✅ Full |
+| Safari (macOS) | ✅ Full |
+| Chrome / Edge (mobile) | ✅ Full |
+| Safari (iOS) | ✅ Full |
+| Old IE | ❌ Not supported |
 
 ---
 
 ## ⚠️ Known Limitations
 
-1. beforeunload popups are disabled on mobile
-      Mobile Edge / Chrome / Safari won't show "Confirm leaving" dialogs — this is a browser spec limitation.
-2. favicon.im returns an "F" placeholder when not found
-      Mitigated by candidate chain ordering (site's own favicon is tried first).
-3. loliapi free API occasionally fails
-      Handled with timeout + retry + hard fallback to keep the page usable.
+1. **`beforeunload` prompt is disabled on mobile** — Mobile Edge / Chrome / Safari will not show the "confirm leave" dialog, due to browser specification limits.
+2. **favicon.im may return a placeholder "F"** — Mitigated by prioritizing the site's own favicon.
+3. **loliapi free API may occasionally fail** — Mitigated with timeout + retry + hard fallback to keep the page usable.
 
 ---
 
 ## 🛠 Tech Stack
 
-· HTML5 / CSS3 / JavaScript (ES6+) — no framework, vanilla only
-· marked — Markdown rendering
-· Fetch API — native browser API
+- HTML5 / CSS3 / JavaScript (ES6+) — No framework, pure vanilla
+- marked — Markdown rendering
+- Fetch API — Native browser API
+- Canvas 2D — Particle effect rendering
 
 ---
 
@@ -301,9 +320,9 @@ MIT License © 2026 TClaw
 
 ## 💖 Credits
 
-· Background image API: loliapi
-· Icon service: favicon.im, DuckDuckGo
-· Markdown rendering: marked
+- Background image API: loliapi
+- Icon services: favicon.im, DuckDuckGo
+- Markdown rendering: marked
 
 ---
 
@@ -314,4 +333,4 @@ If this project helps you, please give it a ⭐ ~
 Made with 💜 by TClaw
 
 </div>
-```
+
