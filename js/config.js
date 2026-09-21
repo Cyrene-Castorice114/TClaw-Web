@@ -1,4 +1,4 @@
-/* =========================================================
+﻿/* =========================================================
    个人主页配置
    ========================================================= */
 
@@ -26,8 +26,8 @@ const SITES = [
   { name: 'QQ',       url: 'https://qm.qq.com/q/BmZKPqSlyw',         desc: '添加TClaw的QQ喵', color: 'ffffff' },
   { name: 'Mail',     url: 'mailto:castorice0914@hoha.top',          desc: '使用邮箱联系TClaw捏～', color: 'EA4335' },
   { name: 'Telegram', url: 'https://t.me/',                          desc: '阿巴阿巴,TG是什么东西喵？', color: '26A5E4' },
-  { name: 'X',        url: 'https://x.com/',                         desc: '查看TClaw的X界面', color: 'ffffff' },
-  { name: 'YouTube',  url: 'https://youtube.com/',                   desc: '油管？输油的东西嘛...', color: 'FF0000' },
+  { name: 'X',        url: 'https://x.com/dmina423598',                         desc: '查看TClaw的X界面', color: 'ffffff' },
+  { name: 'YouTube',  url: 'https://www.youtube.com/@HoshinoAiAWA',                   desc: '油管？输油的东西嘛...', color: 'FF0000' },
 ];
 
 /* ---------- 额外栏目 ----------
@@ -50,12 +50,10 @@ const SECTIONS = [
           {
             label:    'GitHub',
             repo:     'https://github.com/Cyrene-Castorice114/Capha-Script',
-            download: 'https://github.com/Cyrene-Castorice114/Capha-Script/archive/refs/heads/main.zip',
           },
           {
             label:    'Gitcode',
             repo:     'https://gitcode.com/Cyrene-Castorice/Capha-Script',
-            download: 'https://gitcode.com/Cyrene-Castorice/Capha-Script/archive/main.zip',
           },
         ],
         readme: 'https://raw.githubusercontent.com/Cyrene-Castorice114/Capha-Script/main/README.md',
@@ -84,8 +82,8 @@ const SECTIONS = [
 
   /* 技能栈 */
   {
-    title: '技能栈',
-    subtitle: '了解TClaw都擅长什么',
+    title: 'TClawの技能',
+    subtitle: '还不如了解一下了解TClaw都擅长什么呢',
     type: 'tags',
     items: [
       'JavaScript', 'Python', 'C++', 'Servers',
