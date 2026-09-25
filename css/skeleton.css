@@ -1,0 +1,36 @@
+/* =========================================================
+   骨架屏 —— 图片加载前显示灰色占位
+   ========================================================= */
+.card-icon img:not([src]:not([src=""])),
+.section-card-icon img:not([src]:not([src=""])),
+.friend-icon img:not([src]:not([src=""])) {
+  /* 未设置 src 时显示骨架 */
+}
+
+/* 通用骨架：加载中的图片先显示灰块 */
+.card-icon img[src=""],
+.section-card-icon img[src=""],
+.friend-icon img[src=""] {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,.06) 25%,
+    rgba(255,255,255,.12) 50%,
+    rgba(255,255,255,.06) 75%);
+  background-size: 200% 100%;
+  animation: skeleton 1.5s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+@keyframes skeleton {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 手机端：去掉动画省性能 */
+@media (max-width: 900px) {
+  .card-icon img[src=""],
+  .section-card-icon img[src=""],
+  .friend-icon img[src=""] {
+    animation: none;
+    background: rgba(255,255,255,.08);
+  }
+}

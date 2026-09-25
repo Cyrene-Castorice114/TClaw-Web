@@ -1,0 +1,237 @@
+/* ui-polish.css —— UI 美化层 */
+
+/* =========================================================
+   1. 头像：双层旋转光晕
+   ========================================================= */
+.avatar::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #a78bfa,
+    #f472b6,
+    #60a5fa,
+    #34d399,
+    #a78bfa
+  );
+  filter: blur(16px);
+  opacity: .5;
+  z-index: -1;
+  animation: ringSpin 12s linear infinite;
+}
+
+.avatar::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,.6), transparent 70%);
+  filter: blur(8px);
+  opacity: .35;
+  z-index: -1;
+  animation: pulseGlow 3.5s ease-in-out infinite;
+}
+
+@keyframes ringSpin {
+  to { transform: rotate(360deg); }
+}
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1);    opacity: .3; }
+  50%      { transform: scale(1.15); opacity: .55; }
+}
+
+/* =========================================================
+   2. 面板标题：彩色竖条
+   ========================================================= */
+.panel-head h2::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 20px;
+  margin-right: 10px;
+  vertical-align: -4px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #a78bfa, #60a5fa);
+  box-shadow: 0 0 10px rgba(167,139,250,.6);
+}
+
+.section-title::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 13px;
+  margin-right: 8px;
+  vertical-align: -1px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #f472b6, #a78bfa);
+  box-shadow: 0 0 8px rgba(244,114,182,.5);
+}
+
+/* =========================================================
+   3. 卡片：入场 + 悬停增强
+   ========================================================= */
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(.94);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.card {
+  animation: cardIn .7s cubic-bezier(.22,1,.36,1) backwards;
+}
+
+.card::before {
+  background: radial-gradient(200px circle at var(--mx, 50%) var(--my, 50%),
+              rgba(255,255,255,.22), transparent 62%);
+}
+
+.card-icon::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(var(--brand-rgb, 167,139,250), .35), transparent 70%);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity .35s, transform .35s;
+  transform: scale(.8);
+  pointer-events: none;
+}
+
+.card:hover .card-icon::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* =========================================================
+   4. 联系按钮：光泽扫过
+   ========================================================= */
+.contact-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg,
+    transparent 30%,
+    rgba(255,255,255,.35) 50%,
+    transparent 70%);
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+
+.contact-btn:hover::before {
+  opacity: 1;
+  animation: shine .8s ease;
+}
+
+@keyframes shine {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* =========================================================
+   5. Badge 更精致
+   ========================================================= */
+.badge {
+  background: linear-gradient(150deg,
+              rgba(255,255,255,.10),
+              rgba(255,255,255,.04));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 2px 8px -4px rgba(0,0,0,.4);
+}
+
+/* =========================================================
+   6. 滚动条更细
+   ========================================================= */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.14);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,.28);
+  background-clip: content-box;
+}
+
+/* =========================================================
+   7. 右侧面板顶部装饰光
+   ========================================================= */
+.panel {
+  position: relative;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255,255,255,.25),
+    transparent);
+  border-radius: 1px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* =========================================================
+   8. 细微间距优化
+   ========================================================= */
+.panel-head h2 { letter-spacing: .02em; }
+.section-head { padding: 0 6px; }
+.section-title { letter-spacing: .02em; }
+
+/* =========================================================
+   9. 手机端：关闭重装饰
+   ========================================================= */
+@media (max-width: 900px) {
+  .avatar::before,
+  .avatar::after { display: none; }
+
+  .panel-head h2::before,
+  .section-title::before { box-shadow: none; }
+
+  .contact-btn::before { display: none; }
+}
+
+/* =========================================================
+   10. 浅色主题适配
+   ========================================================= */
+html[data-theme="light"] .avatar::before { opacity: .35; }
+html[data-theme="light"] .avatar::after  { opacity: .25; }
+
+html[data-theme="light"] .panel::before {
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0,0,0,.12),
+    transparent);
+}
+
+/* =========================================================
+   11. 减少动效
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .avatar::before,
+  .avatar::after { animation: none; }
+}

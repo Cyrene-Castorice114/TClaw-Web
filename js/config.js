@@ -1,4 +1,4 @@
-/* =========================================================
+﻿/* =========================================================
    个人主页配置
    ========================================================= */
 
@@ -8,7 +8,7 @@ const PROFILE = {
   name:   'Terror Claw-Miao Neko',
   role:   'Bash-Shell 脚本开发者',
   bio:    '喵～16岁高二高中生，平时喜欢摸摸鱼，敲敲代码(其实全程都在玩捏)，是一个不干正经事的猫猫喵',
-  email:  'castorice0914@hoha.top',
+  email:  'tclaw@mengniang.ink',
 };
 
 /* ---------- 右侧面板标题 ---------- */
@@ -24,10 +24,10 @@ const SITES = [
   { name: '哔哩哔哩', url: 'https://space.bilibili.com/1668108830?spm_id_from=333.337.0.0', desc: '咱的Bilibili账号咪', color: '00A1D6' },
   { name: 'Discord',  url: 'https://www.discord.com/',               desc: '添加TClaw的Discord联系方式ww', color: '0084FF' },
   { name: 'QQ',       url: 'https://qm.qq.com/q/BmZKPqSlyw',         desc: '添加TClaw的QQ喵', color: 'ffffff' },
-  { name: 'Mail',     url: 'mailto:castorice0914@hoha.top',          desc: '使用邮箱联系TClaw捏～', color: 'EA4335' },
+  { name: 'Mail',     url: 'mailto:tclaw@mengniang.ink',          desc: '使用邮箱联系TClaw捏～', color: 'EA4335' },
   { name: 'Telegram', url: 'https://t.me/',                          desc: '阿巴阿巴,TG是什么东西喵？', color: '26A5E4' },
-  { name: 'X',        url: 'https://x.com/',                         desc: '查看TClaw的X界面', color: 'ffffff' },
-  { name: 'YouTube',  url: 'https://youtube.com/',                   desc: '油管？输油的东西嘛...', color: 'FF0000' },
+  { name: 'X',        url: 'https://x.com/dmina423598',                         desc: '查看TClaw的X界面', color: 'ffffff' },
+  { name: 'YouTube',  url: 'https://www.youtube.com/@HoshinoAiAWA',                   desc: '油管？输油的东西嘛...', color: 'FF0000' },
 ];
 
 /* ---------- 额外栏目 ----------
@@ -50,23 +50,40 @@ const SECTIONS = [
           {
             label:    'GitHub',
             repo:     'https://github.com/Cyrene-Castorice114/Capha-Script',
-            download: 'https://github.com/Cyrene-Castorice114/Capha-Script/archive/refs/heads/main.zip',
           },
           {
             label:    'Gitcode',
             repo:     'https://gitcode.com/Cyrene-Castorice/Capha-Script',
-            download: 'https://gitcode.com/Cyrene-Castorice/Capha-Script/archive/main.zip',
           },
         ],
         readme: 'https://raw.githubusercontent.com/Cyrene-Castorice114/Capha-Script/main/README.md',
+      },
+      {
+        name: 'TClaw_Web',
+        desc: 'TClaw网站源码',
+        tags: ['CSS', 'HTML', 'JS'],
+        color: '60a5fa',
+        sources: [
+          {
+            label:    'GitHub',
+            repo:     'https://github.com/Cyrene-Castorice114/TClaw-Web',
+            download: 'https://github.com/Cyrene-Castorice114/TClaw-Web/releases/latest/download/TClaw_web.zip'
+          },
+          {
+            label:    'Gitcode',
+            repo:     'https://gitcode.com/Cyrene-Castorice/TClaw-Web',
+            download: 'https://raw.gitcode.com/Cyrene-Castorice/TClaw-Web/archive/refs/heads/1.0.1.zip',
+          },
+        ],
+        readme: 'https://raw.githubusercontent.com/Cyrene-Castorice114/TClaw-Web/main/README.md',
       },
     ],
   },
 
   /* 技能栈 */
   {
-    title: '技能栈',
-    subtitle: '了解TClaw都擅长什么',
+    title: 'TClawの技能',
+    subtitle: '还不如了解一下了解TClaw都擅长什么呢',
     type: 'tags',
     items: [
       'JavaScript', 'Python', 'C++', 'Servers',

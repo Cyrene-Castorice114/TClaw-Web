@@ -1,0 +1,343 @@
+/* bg-viewer.css —— 查看背景图 */
+
+/* ---------- 右下角按钮 ---------- */
+.bg-view-fab {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right, 0px));
+  bottom: calc(max(20px, env(safe-area-inset-bottom, 0px)) + 120px);
+  z-index: 8998;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 16px;
+
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  font-family: inherit;
+  color: #fff;
+  white-space: nowrap;
+  cursor: pointer;
+
+  background: linear-gradient(150deg,
+              rgba(255,255,255,.14),
+              rgba(255,255,255,.04) 50%,
+              rgba(255,255,255,.09));
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 12px 32px -12px rgba(0,0,0,.7);
+
+  transition:
+    transform .35s cubic-bezier(.22,1,.36,1),
+    background .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease;
+}
+
+.bg-view-fab-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.bg-view-fab:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(150deg,
+              rgba(255,255,255,.22),
+              rgba(255,255,255,.06) 50%,
+              rgba(255,255,255,.14));
+  border-color: rgba(255,255,255,.26);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    0 18px 40px -14px rgba(0,0,0,.75),
+    0 0 28px -8px rgba(167,139,250,.6);
+}
+
+.bg-view-fab:active { transform: translateY(-1px) scale(.97); }
+
+/* ---------- 弹窗 ---------- */
+.bg-viewer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  background: rgba(4, 5, 12, 0);
+  backdrop-filter: blur(0px) saturate(100%);
+  -webkit-backdrop-filter: blur(0px) saturate(100%);
+
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    background .45s ease,
+    opacity .3s ease,
+    visibility .3s ease,
+    backdrop-filter .45s ease,
+    -webkit-backdrop-filter .45s ease;
+}
+
+.bg-viewer-modal.open {
+  opacity: 1;
+  visibility: visible;
+  background: rgba(4, 5, 12, .82);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+}
+
+.bg-viewer-panel {
+  position: relative;
+  width: min(860px, 100%);
+  max-height: 90vh;
+  border-radius: 22px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  background: linear-gradient(150deg,
+              rgba(30, 32, 45, .94),
+              rgba(18, 20, 30, .97));
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 30px 80px -20px rgba(0,0,0,.9);
+
+  transform: translateY(16px) scale(.94);
+  opacity: 0;
+  transition:
+    transform .5s cubic-bezier(.22,1,.36,1),
+    opacity .35s ease;
+}
+
+.bg-viewer-modal.open .bg-viewer-panel {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* ---------- 头部 ---------- */
+.bg-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.bg-viewer-title {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .01em;
+}
+
+.bg-viewer-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.7);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  font-family: inherit;
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.bg-viewer-close:hover {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.22);
+  color: #fff;
+}
+
+/* ---------- 图片区 ---------- */
+.bg-viewer-body {
+  flex: 1;
+  min-height: 220px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0,0,0,.3);
+}
+
+.bg-viewer-img {
+  max-width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px -12px rgba(0,0,0,.8);
+}
+
+.bg-viewer-empty {
+  font-size: 13.5px;
+  color: rgba(255,255,255,.45);
+  padding: 40px 20px;
+}
+
+/* ---------- 底部按钮 ---------- */
+.bg-viewer-footer {
+  padding: 14px 18px 18px;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bg-viewer-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 24px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #fff;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,.2);
+
+  background: linear-gradient(150deg, #a78bfa, #7c3aed);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    0 10px 24px -10px rgba(167,139,250,.9);
+
+  transition: transform .25s, box-shadow .25s;
+}
+
+.bg-viewer-save svg { width: 16px; height: 16px; }
+
+.bg-viewer-save:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.4),
+    0 14px 32px -12px rgba(167,139,250,1);
+}
+
+.bg-viewer-save:active { transform: scale(.97); }
+
+.bg-viewer-save:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---------- 手机端 ---------- */
+@media (max-width: 900px) {
+  .bg-view-fab {
+    height: 46px;
+    padding: 0 14px;
+    border-radius: 15px;
+    font-size: 12.5px;
+    gap: 7px;
+    right: max(14px, env(safe-area-inset-right, 0px));
+    bottom: calc(max(14px, env(safe-area-inset-bottom, 0px)) + 116px);
+
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: linear-gradient(150deg,
+                rgba(28, 30, 42, .88),
+                rgba(18, 20, 30, .82));
+  }
+
+  .bg-view-fab-icon { width: 18px; height: 18px; }
+  .bg-view-fab:hover { transform: none; }
+
+  .bg-viewer-modal {
+    padding: 12px;
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+
+  .bg-viewer-panel {
+    max-height: 92vh;
+    border-radius: 20px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .bg-viewer-header { padding: 12px 14px; }
+  .bg-viewer-title  { font-size: 13px; }
+  .bg-viewer-body   { padding: 12px; min-height: 180px; }
+  .bg-viewer-img    { max-height: 58vh; }
+  .bg-viewer-footer { padding: 12px 14px 14px; }
+
+  .bg-viewer-save {
+    height: 44px;
+    padding: 0 20px;
+    font-size: 13px;
+  }
+}
+
+/* ---------- 浅色主题 ---------- */
+html[data-theme="light"] .bg-view-fab {
+  color: #1a1d2e;
+  background: linear-gradient(150deg,
+              rgba(255,255,255,.95),
+              rgba(255,255,255,.75) 50%,
+              rgba(255,255,255,.85));
+  border-color: rgba(0,0,0,.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 12px 32px -12px rgba(0,0,0,.25);
+}
+
+html[data-theme="light"] .bg-view-fab:hover {
+  background: linear-gradient(150deg,
+              rgba(255,255,255,1),
+              rgba(255,255,255,.85) 50%,
+              rgba(255,255,255,.95));
+  border-color: rgba(0,0,0,.12);
+}
+
+html[data-theme="light"] .bg-viewer-panel {
+  background: linear-gradient(150deg,
+              rgba(255,255,255,.98),
+              rgba(248,248,252,.98));
+  border-color: rgba(0,0,0,.08);
+}
+
+html[data-theme="light"] .bg-viewer-title { color: #1a1d2e; }
+html[data-theme="light"] .bg-viewer-close {
+  color: #1a1d2e;
+  background: rgba(0,0,0,.04);
+  border-color: rgba(0,0,0,.06);
+}
+html[data-theme="light"] .bg-viewer-close:hover {
+  background: rgba(0,0,0,.1);
+  border-color: rgba(0,0,0,.15);
+}
+html[data-theme="light"] .bg-viewer-body {
+  background: rgba(0,0,0,.04);
+}
+html[data-theme="light"] .bg-viewer-empty { color: rgba(26,29,46,.5); }
+
+html[data-theme="light"] .bg-viewer-modal {
+  background: rgba(255,255,255,.6);
+}
+
+/* ---------- 减少动效 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .bg-view-fab,
+  .bg-viewer-modal,
+  .bg-viewer-panel,
+  .bg-viewer-save { transition: none; }
+}

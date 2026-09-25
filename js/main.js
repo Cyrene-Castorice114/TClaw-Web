@@ -162,17 +162,10 @@ const SVG_ICONS = {
 
 /* =========================================================
    图标候选链
-   ---------------------------------------------------------
-   site.icon 支持的写法：
-   · 'github.png'                       → assets/icons/github.png
-   · 'assets/custom/xxx.png'            → 相对项目根路径
-   · 'https://example.com/icon.png'     → 完整 URL
-   · 'data:image/svg+xml,...'           → 内联
    ========================================================= */
 function buildIconCandidates(site) {
   const list = [];
 
-  /* mailto: 用内联 SVG */
   if (site.url && /^mailto:/i.test(site.url)) {
     const color = '#' + (site.color || 'EA4335').replace('#', '');
     const svg =
@@ -181,7 +174,6 @@ function buildIconCandidates(site) {
     return list;
   }
 
-  /* 1. 自定义图标 */
   if (site.icon) {
     const ic = String(site.icon).trim();
     if (/^(https?:|data:|blob:)/i.test(ic)) {
@@ -193,7 +185,6 @@ function buildIconCandidates(site) {
     }
   }
 
-  /* 2. 提取域名 */
   let domain = '';
   try {
     if (site.url && /^https?:\/\//i.test(site.url)) {
@@ -508,7 +499,9 @@ function renderSectionProjects(section, container) {
       actions.appendChild(a);
     });
 
-    const downloads = (item.sources || []).filter(s => s.download);
+    const downloads = item.noDownload
+      ? []
+      : (item.sources || []).filter(s => s.download);
     if (downloads.length) {
       const dd = document.createElement('div');
       dd.className = 'project-dropdown';
@@ -583,7 +576,7 @@ function renderSectionProjects(section, container) {
   container.appendChild(gridEl);
 }
 
-/* ---------- friends（友情链接，长条） ---------- */
+/* ---------- friends ---------- */
 function renderSectionFriends(section, container, iconQueueRef) {
   const wrap = document.createElement('div');
   wrap.className = 'friends';
@@ -639,7 +632,6 @@ function renderSectionFriends(section, container, iconQueueRef) {
 
     wrap.appendChild(a);
 
-    /* 友情链接标记 noFaviconIm: true → 只用网站自身 favicon（除非有自定义 icon） */
     if (iconQueueRef) {
       iconQueueRef.push({
         site: item,
@@ -727,7 +719,6 @@ function preloadAllIcons() {
   iconQueue.forEach(({ site, noFaviconIm }) => {
     let list = buildIconCandidates(site);
     if (noFaviconIm) {
-      /* 友情链接：保留自定义 icon，过滤掉 favicon.im */
       list = list.filter(u => !u.includes('favicon.im/'));
     }
     if (!list[0]) return;
@@ -735,6 +726,8 @@ function preloadAllIcons() {
     const img = new Image();
     img.decoding = 'async';
     img.src = list[0];
+    /* 4 秒后如果还没加载完，主动断开 */
+    setTimeout(() => { if (!img.complete) img.src = ''; }, 4000);
   });
 }
 preloadAllIcons();
@@ -827,7 +820,16 @@ async function openReadme(name, readme) {
     }
 
     try {
-      const res = await fetch(url, { cache: 'no-cache' });
+      /* ★ 用 AbortController 加超时，防止 README 请求挂住 */
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 6000);
+
+      const res = await fetch(url, {
+        cache: 'no-cache',
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+
       if (!res.ok) throw new Error('HTTP ' + res.status);
 
       const text = await res.text();
@@ -884,9 +886,7 @@ document.addEventListener('click', () => {
 });
 
 /* =========================================================
-   图标加载
-   ---------------------------------------------------------
-   options.noFaviconIm = true → 只走网站自身 favicon（不影响自定义 icon）
+   图标加载 —— 每步主动释放，防止请求挂住
    ========================================================= */
 const ICON_TIMEOUT = 2500;
 window.ICON_DEBUG  = false;
@@ -898,6 +898,10 @@ function tryLoadOne(url, img, timeoutMs) {
       if (settled) return;
       settled = true;
       cleanup();
+      /* ★ 主动断开挂住的请求 */
+      if (!img.src.startsWith('data:')) {
+        img.removeAttribute('src');
+      }
       resolve(false);
     }, timeoutMs);
 
@@ -930,7 +934,6 @@ function tryLoadOne(url, img, timeoutMs) {
 async function loadIcon(site, img, initialEl, options = {}) {
   let candidates = buildIconCandidates(site);
 
-  /* 友情链接：过滤掉 favicon.im（自定义 icon 和网站自身 favicon 保留） */
   if (options.noFaviconIm) {
     candidates = candidates.filter(u => !u.includes('favicon.im/'));
   }
