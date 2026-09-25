@@ -1,10 +1,5 @@
-/* =========================================================
-   theme.css
-   ---------------------------------------------------------
-   深色（默认）+ 浅色两套主题
-   ========================================================= */
+/* theme.css —— 深色 + 浅色主题 */
 
-/* ---------- 深色主题（默认） ---------- */
 :root,
 html[data-theme="dark"] {
   --bg-base:        #06070c;
@@ -14,30 +9,25 @@ html[data-theme="dark"] {
   --bg-text-faint:  rgba(255,255,255,.42);
   --bg-text-mute:   rgba(255,255,255,.3);
 
-  /* 玻璃 */
   --glass-bg-1:     rgba(255,255,255,.07);
   --glass-bg-2:     rgba(255,255,255,.02);
   --glass-bg-3:     rgba(255,255,255,.045);
   --glass-border:   rgba(255,255,255,.1);
   --glass-high:     rgba(255,255,255,.14);
 
-  /* 卡片 */
   --card-bg-1:      rgba(255,255,255,.12);
   --card-bg-2:      rgba(255,255,255,.04);
   --card-border:    rgba(255,255,255,.1);
   --card-shadow:    rgba(0,0,0,.4);
 
-  /* 名字渐变 */
   --name-gradient-1: #fff;
   --name-gradient-2: rgba(255,255,255,.68);
 
-  /* 主题按钮 */
   --toggle-bg:      rgba(20, 22, 32, .88);
   --toggle-border:  rgba(255,255,255,.14);
   --toggle-color:   rgba(255,255,255,.85);
 }
 
-/* ---------- 浅色主题 ---------- */
 html[data-theme="light"] {
   --bg-base:        #f5f5f7;
   --bg-aurora-from: #e0e4ff;
@@ -46,32 +36,24 @@ html[data-theme="light"] {
   --bg-text-faint:  rgba(26,29,46,.5);
   --bg-text-mute:   rgba(26,29,46,.38);
 
-  /* 玻璃 */
   --glass-bg-1:     rgba(255,255,255,.55);
   --glass-bg-2:     rgba(255,255,255,.35);
   --glass-bg-3:     rgba(255,255,255,.45);
   --glass-border:   rgba(0,0,0,.06);
   --glass-high:     rgba(255,255,255,.7);
 
-  /* 卡片 */
   --card-bg-1:      rgba(255,255,255,.7);
   --card-bg-2:      rgba(255,255,255,.45);
   --card-border:    rgba(0,0,0,.07);
   --card-shadow:    rgba(0,0,0,.08);
 
-  /* 名字渐变 */
   --name-gradient-1: #1a1d2e;
   --name-gradient-2: rgba(26,29,46,.65);
 
-  /* 主题按钮 */
   --toggle-bg:      rgba(255,255,255,.88);
   --toggle-border:  rgba(0,0,0,.08);
   --toggle-color:   rgba(26,29,46,.85);
 }
-
-/* =========================================================
-   应用到现有样式
-   ========================================================= */
 
 /* ---------- body 背景 ---------- */
 html[data-theme="light"] body {
@@ -86,9 +68,7 @@ html[data-theme="light"] .bg {
     var(--bg-base);
 }
 
-html[data-theme="light"] .bg::after {
-  opacity: .015;
-}
+html[data-theme="light"] .bg::after { opacity: .015; }
 
 /* ---------- 玻璃 ---------- */
 html[data-theme="light"] .glass {
@@ -113,32 +93,41 @@ html[data-theme="light"] .glass::after {
   background: linear-gradient(160deg, rgba(255,255,255,.4) 0%, rgba(255,255,255,0) 32%);
 }
 
-/* ---------- 文字 ---------- */
+/* ---------- 镀金名字（浅色下深金 · 无缝流光 · 左→右） ---------- */
 html[data-theme="light"] .name {
-  background: linear-gradient(180deg, var(--name-gradient-1) 30%, var(--name-gradient-2));
+  background: linear-gradient(
+    100deg,
+    #5c3d0a 0%,
+    #a37d1f 8%,
+    #d4a820 20%,
+    #f5d76e 25%,
+    #d4a820 30%,
+    #a37d1f 42%,
+    #5c3d0a 50%,
+    #a37d1f 58%,
+    #d4a820 70%,
+    #f5d76e 75%,
+    #d4a820 80%,
+    #a37d1f 92%,
+    #5c3d0a 100%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: goldFlow 4s linear infinite;
 }
 
+/* ---------- 其他文字 ---------- */
 html[data-theme="light"] .role {
   color: var(--bg-text-dim);
   background: rgba(0,0,0,.04);
   border-color: rgba(0,0,0,.06);
 }
-
-html[data-theme="light"] .bio {
-  color: var(--bg-text-dim);
-}
-
-html[data-theme="light"] .panel-head h2 {
-  color: var(--bg-text);
-}
-
-html[data-theme="light"] .panel-head p {
-  color: var(--bg-text-faint);
-}
-
+html[data-theme="light"] .bio { color: var(--bg-text-dim); }
+html[data-theme="light"] .panel-head h2 { color: var(--bg-text); }
+html[data-theme="light"] .panel-head p  { color: var(--bg-text-faint); }
 html[data-theme="light"] .badge {
   color: var(--bg-text-dim);
   background: rgba(0,0,0,.04);
@@ -152,7 +141,6 @@ html[data-theme="light"] .contact-btn {
   border-color: rgba(0,0,0,.08);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
 }
-
 html[data-theme="light"] .contact-btn:hover {
   background: linear-gradient(150deg, rgba(0,0,0,.1), rgba(0,0,0,.04));
 }
@@ -163,59 +151,36 @@ html[data-theme="light"] .card {
   border-color: var(--card-border);
   box-shadow: 0 4px 16px -6px var(--card-shadow);
 }
-
 html[data-theme="light"] .card:hover {
   background: linear-gradient(155deg, rgba(255,255,255,.9), rgba(255,255,255,.6));
   border-color: rgba(0,0,0,.12);
 }
-
-html[data-theme="light"] .card-name {
-  color: var(--bg-text);
-}
-
-html[data-theme="light"] .card-desc {
-  color: var(--bg-text-faint);
-}
-
+html[data-theme="light"] .card-name { color: var(--bg-text); }
+html[data-theme="light"] .card-desc { color: var(--bg-text-faint); }
 html[data-theme="light"] .card-icon {
   background: rgba(0,0,0,.04);
   border-color: rgba(0,0,0,.06);
 }
-
-html[data-theme="light"] .card-initial {
-  color: var(--bg-text-mute);
-}
+html[data-theme="light"] .card-initial { color: var(--bg-text-mute); }
 
 /* ---------- 栏目 ---------- */
-html[data-theme="light"] .section-title {
-  color: var(--bg-text);
-}
-
-html[data-theme="light"] .section-sub {
-  color: var(--bg-text-faint);
-}
-
+html[data-theme="light"] .section-title { color: var(--bg-text); }
+html[data-theme="light"] .section-sub   { color: var(--bg-text-faint); }
 html[data-theme="light"] .section-card,
 html[data-theme="light"] .friend-card,
 html[data-theme="light"] .project-card {
   background: linear-gradient(155deg, var(--card-bg-1), var(--card-bg-2));
   border-color: var(--card-border);
 }
-
 html[data-theme="light"] .section-card-name,
 html[data-theme="light"] .friend-name,
 html[data-theme="light"] .project-name,
 html[data-theme="light"] .timeline-text,
-html[data-theme="light"] .section-list-item {
-  color: var(--bg-text);
-}
-
+html[data-theme="light"] .section-list-item { color: var(--bg-text); }
 html[data-theme="light"] .section-card-desc,
 html[data-theme="light"] .friend-desc,
 html[data-theme="light"] .project-desc,
-html[data-theme="light"] .timeline-date {
-  color: var(--bg-text-faint);
-}
+html[data-theme="light"] .timeline-date { color: var(--bg-text-faint); }
 
 /* ---------- 标签 ---------- */
 html[data-theme="light"] .tag {
@@ -230,14 +195,8 @@ html[data-theme="light"] .project-btn {
   background: rgba(0,0,0,.04);
   border-color: rgba(0,0,0,.07);
 }
-
-html[data-theme="light"] .project-btn:hover {
-  background: rgba(0,0,0,.08);
-}
-
-html[data-theme="light"] .project-btn-icon {
-  background: rgba(0,0,0,.06);
-}
+html[data-theme="light"] .project-btn:hover { background: rgba(0,0,0,.08); }
+html[data-theme="light"] .project-btn-icon  { background: rgba(0,0,0,.06); }
 
 /* ---------- 友情链接按钮 ---------- */
 html[data-theme="light"] .friend-action {
@@ -253,7 +212,6 @@ html[data-theme="light"] .timeline::before {
               rgba(0,0,0,.05) 70%,
               transparent);
 }
-
 html[data-theme="light"] .timeline-item::before {
   background: rgba(0,0,0,.6);
   box-shadow: 0 0 0 3px rgba(0,0,0,.06), 0 0 14px rgba(167,139,250,.5);
@@ -271,7 +229,6 @@ html[data-theme="light"] .github-fab {
     inset 0 1px 0 rgba(255,255,255,.9),
     0 12px 32px -12px rgba(0,0,0,.25);
 }
-
 html[data-theme="light"] .github-fab:hover {
   background: linear-gradient(150deg,
               rgba(255,255,255,1),
@@ -285,7 +242,6 @@ html[data-theme="light"] ::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,.15);
   background-clip: content-box;
 }
-
 html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
   background: rgba(0,0,0,.28);
   background-clip: content-box;
@@ -298,7 +254,6 @@ html[data-theme="light"] .readme-panel {
               rgba(248,248,252,.98));
   border-color: rgba(0,0,0,.08);
 }
-
 html[data-theme="light"] .readme-title,
 html[data-theme="light"] .readme-body h1,
 html[data-theme="light"] .readme-body h2,
@@ -307,39 +262,25 @@ html[data-theme="light"] .readme-body h4,
 html[data-theme="light"] .readme-body strong {
   color: var(--bg-text);
 }
-
-html[data-theme="light"] .readme-body {
-  color: rgba(26,29,46,.85);
-}
-
+html[data-theme="light"] .readme-body { color: rgba(26,29,46,.85); }
 html[data-theme="light"] .readme-body code {
   background: rgba(0,0,0,.06);
   color: #a21caf;
 }
-
 html[data-theme="light"] .readme-body pre {
   background: rgba(0,0,0,.05);
   border-color: rgba(0,0,0,.06);
 }
-
-html[data-theme="light"] .readme-body pre code {
-  color: rgba(26,29,46,.9);
-}
-
+html[data-theme="light"] .readme-body pre code { color: rgba(26,29,46,.9); }
 html[data-theme="light"] .readme-action,
 html[data-theme="light"] .readme-close {
   color: var(--bg-text);
   background: rgba(0,0,0,.04);
   border-color: rgba(0,0,0,.06);
 }
+html[data-theme="light"] .readme-modal { background: rgba(255,255,255,.6); }
 
-html[data-theme="light"] .readme-modal {
-  background: rgba(255,255,255,.6);
-}
-
-/* =========================================================
-   主题切换按钮
-   ========================================================= */
+/* ---------- 主题切换按钮（毛玻璃） ---------- */
 .theme-toggle {
   position: fixed;
   top: max(16px, env(safe-area-inset-top, 0px));
@@ -349,31 +290,44 @@ html[data-theme="light"] .readme-modal {
   width: 44px;
   height: 44px;
   border-radius: 14px;
-  border: 1px solid var(--toggle-border);
-  background: var(--toggle-bg);
-  color: var(--toggle-color);
-  cursor: pointer;
 
+  border: 1px solid rgba(255, 255, 255, .18);
+
+  background: linear-gradient(150deg,
+              rgba(255,255,255,.14),
+              rgba(255,255,255,.04) 50%,
+              rgba(255,255,255,.09));
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+
+  color: rgba(255, 255, 255, .9);
+
+  cursor: pointer;
   display: grid;
   place-items: center;
 
-  backdrop-filter: blur(20px) saturate(170%);
-  -webkit-backdrop-filter: blur(20px) saturate(170%);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.15),
+    inset 0 1px 0 rgba(255,255,255,.22),
     0 8px 24px -10px rgba(0,0,0,.5);
 
   transition: transform .25s cubic-bezier(.22,1,.36,1),
-              background .3s, border-color .3s, color .3s;
+              background .3s, border-color .3s, color .3s, box-shadow .3s;
 }
 
 .theme-toggle:hover {
   transform: translateY(-2px);
+  background: linear-gradient(150deg,
+              rgba(255,255,255,.22),
+              rgba(255,255,255,.07) 50%,
+              rgba(255,255,255,.14));
+  border-color: rgba(255, 255, 255, .28);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    0 12px 30px -10px rgba(0,0,0,.6),
+    0 0 24px -8px rgba(167,139,250,.6);
 }
 
-.theme-toggle:active {
-  transform: scale(.96);
-}
+.theme-toggle:active { transform: scale(.96); }
 
 .theme-icon {
   position: absolute;
@@ -382,7 +336,6 @@ html[data-theme="light"] .readme-modal {
   transition: opacity .3s, transform .4s cubic-bezier(.22,1,.36,1);
 }
 
-/* 深色下：显示太阳（点了切浅色） */
 html[data-theme="dark"] .theme-icon-sun,
 html:not([data-theme]) .theme-icon-sun {
   opacity: 1;
@@ -393,8 +346,6 @@ html:not([data-theme]) .theme-icon-moon {
   opacity: 0;
   transform: rotate(-90deg);
 }
-
-/* 浅色下：显示月亮（点了切深色） */
 html[data-theme="light"] .theme-icon-sun {
   opacity: 0;
   transform: rotate(90deg);
@@ -404,7 +355,32 @@ html[data-theme="light"] .theme-icon-moon {
   transform: rotate(0deg);
 }
 
-/* 手机端 */
+/* ---------- 浅色主题：白色毛玻璃 + 深色图标 ---------- */
+html[data-theme="light"] .theme-toggle {
+  background: linear-gradient(150deg,
+              rgba(255,255,255,.72),
+              rgba(255,255,255,.42) 50%,
+              rgba(255,255,255,.6));
+  border-color: rgba(0, 0, 0, .08);
+  color: rgba(26, 29, 46, .88);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 8px 24px -10px rgba(0,0,0,.15);
+}
+
+html[data-theme="light"] .theme-toggle:hover {
+  background: linear-gradient(150deg,
+              rgba(255,255,255,.92),
+              rgba(255,255,255,.62) 50%,
+              rgba(255,255,255,.85));
+  border-color: rgba(0, 0, 0, .14);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    0 12px 30px -10px rgba(0,0,0,.22),
+    0 0 24px -8px rgba(167,139,250,.5);
+}
+
+/* ---------- 手机端 ---------- */
 @media (max-width: 900px) {
   .theme-toggle {
     width: 40px;
@@ -413,20 +389,21 @@ html[data-theme="light"] .theme-icon-moon {
     top: max(12px, env(safe-area-inset-top, 0px));
     right: max(12px, env(safe-area-inset-right, 0px));
 
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: 0 6px 18px -8px rgba(0,0,0,.4);
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.2),
+      0 6px 18px -8px rgba(0,0,0,.4);
   }
-  .theme-icon {
-    width: 18px;
-    height: 18px;
+  .theme-icon { width: 18px; height: 18px; }
+
+  html[data-theme="light"] .theme-toggle {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.9),
+      0 6px 18px -8px rgba(0,0,0,.18);
   }
 }
 
-/* 减少动效 */
 @media (prefers-reduced-motion: reduce) {
-  .theme-toggle,
-  .theme-icon {
-    transition: none;
-  }
+  .theme-toggle, .theme-icon { transition: none; }
 }

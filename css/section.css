@@ -420,8 +420,8 @@
    ========================================================= */
 .projects {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));  /* ★ 300 → 360 */
-  grid-auto-rows: 1fr;                                            /* ★ 新增：同行卡片等高 */
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-auto-rows: 1fr;
   gap: 14px;
   min-width: 0;
 }
@@ -433,9 +433,7 @@
   gap: 10px;
   padding: 18px 20px 16px;
   border-radius: 20px;
-  /* ★ 允许下拉菜单溢出显示 */
   overflow: visible;
-  /* ★ 占满 grid 单元格高度 */
   height: 100%;
   background: linear-gradient(155deg, rgba(255,255,255,.10), rgba(255,255,255,.035));
   border: 1px solid rgba(255,255,255,.10);
@@ -513,23 +511,20 @@
   position: relative;
   z-index: 2;
   word-break: break-word;
-  /* ★ 撑开剩余空间，让按钮沉到底部 */
   flex: 1;
 }
 
-/* ---------- 项目按钮：胶囊 + 左侧圆形图标 ---------- */
+/* ---------- 项目按钮 ---------- */
 .project-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
-  /* ★ 自动推到卡片底部 */
   margin-top: auto;
   padding-top: 10px;
   position: relative;
   z-index: 2;
 }
 
-/* 所有按钮统一：内容水平居中 */
 .project-actions .project-btn,
 .project-actions .project-dropdown {
   min-width: 0;
@@ -615,7 +610,6 @@
   position: relative;
 }
 
-/* ★ 下拉菜单：完整显示，不被裁切 */
 .project-dropdown-menu {
   position: absolute;
   bottom: calc(100% + 6px);
@@ -682,16 +676,37 @@
   align-items: center;
   justify-content: center;
   padding: 30px 20px;
-  background: rgba(4, 5, 12, .72);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+
+  background: rgba(4, 5, 12, 0);
+  backdrop-filter: blur(0px) saturate(100%);
+  -webkit-backdrop-filter: blur(0px) saturate(100%);
+
   opacity: 0;
   visibility: hidden;
-  transition: opacity .3s ease, visibility .3s ease;
+  transition:
+    background .55s ease,
+    opacity .35s ease,
+    visibility .35s ease,
+    backdrop-filter .55s ease,
+    -webkit-backdrop-filter .55s ease;
 }
 
-.readme-modal.open { opacity: 1; visibility: visible; }
+.readme-modal.open {
+  opacity: 1;
+  visibility: visible;
+  background: rgba(4, 5, 12, .82);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+}
 
+/* 仅用于测量：临时可见但完全透明 */
+.readme-modal.measuring {
+  visibility: visible;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- 弹窗面板：从"按钮方向"轻轻展开 ---------- */
 .readme-panel {
   position: relative;
   width: min(820px, 100%);
@@ -700,6 +715,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+
   background: linear-gradient(150deg,
               rgba(30, 32, 45, .94),
               rgba(18, 20, 30, .97));
@@ -709,11 +725,35 @@
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.18),
     0 30px 80px -20px rgba(0,0,0,.9);
-  transform: scale(.96);
-  transition: transform .3s cubic-bezier(.22,1,.36,1);
+
+  /* ★ 从"按钮方向"偏移一小段 + 略微缩小 + 透明 */
+  --tx: 0px;
+  --ty: 0px;
+  transform: translate(var(--tx), var(--ty)) scale(0.9);
+  opacity: 0;
+  transform-origin: center center;
+
+  transition:
+    transform .5s cubic-bezier(.22,1,.36,1),
+    opacity .35s ease;
 }
 
-.readme-modal.open .readme-panel { transform: scale(1); }
+.readme-modal.open .readme-panel {
+  transform: translate(0, 0) scale(1);
+  opacity: 1;
+}
+
+/* 内容延迟淡入，避免缩放时内容变形太明显 */
+.readme-header,
+.readme-body {
+  opacity: 0;
+  transition: opacity .3s ease .16s;
+}
+
+.readme-modal.open .readme-header,
+.readme-modal.open .readme-body {
+  opacity: 1;
+}
 
 .readme-header {
   display: flex;
@@ -1124,15 +1164,29 @@
     background: rgba(20, 22, 32, .98);
   }
 
+  /* 手机端：弹窗背景不用模糊，面板扩散动画简化 */
   .readme-modal {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: rgba(4, 5, 12, .92);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(4, 5, 12, .92) !important;
+    transition: opacity .3s ease, visibility .3s ease;
+  }
+
+  .readme-modal.open {
+    background: rgba(4, 5, 12, .92) !important;
+  }
+
+  .readme-panel {
+    transform: translate(var(--tx), var(--ty)) scale(0.92);
+    transition: transform .4s cubic-bezier(.22,1,.36,1), opacity .25s ease;
+  }
+
+  .readme-modal.open .readme-panel {
+    transform: translate(0, 0) scale(1);
   }
 
   /* ---------- README 弹窗手机适配 ---------- */
   .readme-modal { padding: 14px 10px; }
-  .readme-panel { max-height: 90vh; border-radius: 18px; }
   .readme-header { padding: 12px 14px; }
   .readme-title  { font-size: 13px; }
   .readme-body   { padding: 18px 18px 24px; font-size: 13.5px; }

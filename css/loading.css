@@ -1,19 +1,21 @@
-/* =========================================================
-   全屏加载页
-   ========================================================= */
+/* loading.css —— 全屏加载页 */
 
 .loading-screen {
   position: fixed;
   inset: 0;
   z-index: 99999;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  background: rgba(6, 7, 12, .72);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+
+  padding: 32px;
+
+  background: rgba(6, 7, 12, .45);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
   transition: opacity .5s ease, visibility .5s ease;
+  pointer-events: all;
 }
 
 .loading-screen.hidden {
@@ -22,156 +24,284 @@
   pointer-events: none;
 }
 
-.loading-card {
-  position: relative;
-  width: 340px;
-  max-width: 100%;
-  padding: 34px 28px 28px;
-  border-radius: 22px;
-  text-align: center;
+#loadingDetail {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 14px;
-  background: linear-gradient(150deg,
-              rgba(255,255,255,.14),
-              rgba(255,255,255,.04) 50%,
-              rgba(255,255,255,.09));
-  backdrop-filter: blur(24px) saturate(170%);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.22),
-    0 24px 70px -22px rgba(0,0,0,.8);
-  animation: loadingCardIn .55s cubic-bezier(.22,1,.36,1);
-}
+  justify-content: center;
 
-.loading-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(150deg,
-              rgba(255,255,255,.55),
-              rgba(255,255,255,.06) 30%,
-              rgba(255,255,255,.02) 60%,
-              rgba(255,255,255,.35));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-@keyframes loadingCardIn {
-  from { opacity: 0; transform: translateY(14px) scale(.96); }
-  to   { opacity: 1; transform: none; }
-}
-
-.loading-spinner {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 3px solid rgba(255,255,255,.13);
-  border-top-color: rgba(255,255,255,.9);
-  box-shadow: 0 0 28px -6px rgba(167,139,250,.85);
-  animation: spin .9s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.loading-title {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: .02em;
-  color: #fff;
-}
-
-.loading-detail {
-  margin: 0;
-  font-size: 12px;
-  letter-spacing: .02em;
-  color: rgba(255,255,255,.55);
-  min-height: 44px;
   width: 100%;
-  text-align: center;
-  transition: opacity .25s;
-}
+  max-width: 520px;
+  max-height: 90vh;
 
-.loading-detail .l-line {
-  line-height: 1.65;
-}
-
-.loading-detail .l-line b {
-  color: #fff;
-  font-weight: 700;
-}
-
-.loading-detail .l-sub {
-  margin-top: 4px;
-  font-size: 11px;
-  color: rgba(255,255,255,.42);
-}
-
-.loading-detail .l-dim {
-  color: rgba(255,255,255,.42);
-  font-weight: 400;
-}
-
-.loading-detail .l-chip {
-  display: inline-block;
-  padding: 2px 8px;
-  margin: 0 3px 3px 0;
-  border-radius: 999px;
-  font-size: 10.5px;
-  font-weight: 500;
-  color: rgba(255,255,255,.78);
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.1);
-  white-space: nowrap;
-}
-
-.loading-bar {
-  width: 100%;
-  height: 3px;
-  margin-top: 4px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.08);
+  transition: opacity .18s ease;
   overflow: hidden;
 }
 
-.loading-bar-fill {
-  width: 0;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #a78bfa, #60a5fa, #f472b6);
-  box-shadow: 0 0 14px rgba(167,139,250,.7);
-  transition: width .5s cubic-bezier(.22,1,.36,1);
+#loadingDetail:has(.loading-task-list) {
+  flex-direction: column;
+  gap: 0;
 }
 
-/* =========================================================
-   手机端：去掉模糊
-   ========================================================= */
+/* ---------- 单条状态 ---------- */
+.loading-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: 100%;
+  padding: 4px 0;
+
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #fff;
+  text-align: center;
+
+  text-shadow:
+    0 2px 24px rgba(0,0,0,.6),
+    0 0 40px rgba(167,139,250,.3);
+}
+
+/* ---------- 折叠头 ---------- */
+.loading-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 4px 0;
+}
+
+.loading-head-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  font-size: 19px;
+  font-weight: 600;
+  color: #fff;
+  text-shadow:
+    0 2px 24px rgba(0,0,0,.6),
+    0 0 40px rgba(167,139,250,.3);
+}
+
+/* ---------- 动态三点 ---------- */
+.loading-dots {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.loading-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .3;
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+.loading-dots span:nth-child(2) { animation-delay: .18s; }
+.loading-dots span:nth-child(3) { animation-delay: .36s; }
+
+@keyframes dotPulse {
+  0%, 60%, 100% { opacity: .3; transform: scale(1); }
+  30%           { opacity: 1;  transform: scale(1.35); }
+}
+
+/* ---------- 打勾 ---------- */
+.loading-check {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.loading-check circle {
+  stroke-dasharray: 63;
+  stroke-dashoffset: 63;
+  animation: checkCircle .45s ease forwards;
+}
+.loading-check path {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: checkMark .4s .3s ease forwards;
+}
+@keyframes checkCircle { to { stroke-dashoffset: 0; } }
+@keyframes checkMark   { to { stroke-dashoffset: 0; } }
+
+/* ---------- 感叹号 ---------- */
+.loading-exclaim {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(150deg, #fbbf24, #f59e0b);
+  color: #06070c;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 0 20px rgba(251,191,36,.5);
+  animation: exclaimPop .55s cubic-bezier(.22,1.6,.36,1);
+}
+@keyframes exclaimPop {
+  0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+  55%  { transform: scale(1.25) rotate(8deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* ---------- 展开/折叠按钮 ---------- */
+.loading-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.75);
+  cursor: pointer;
+  transition: transform .3s, background .2s, color .2s, border-color .2s;
+}
+
+.loading-toggle:hover {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.25);
+  color: #fff;
+}
+
+.loading-toggle svg {
+  width: 16px;
+  height: 16px;
+  transition: transform .35s cubic-bezier(.22,1,.36,1);
+}
+
+.loading-toggle.open svg {
+  transform: rotate(180deg);
+}
+
+/* ---------- 任务列表（默认折叠） ---------- */
+.loading-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+
+  transition:
+    max-height .45s cubic-bezier(.22,1,.36,1),
+    opacity .3s ease,
+    margin-top .3s ease;
+}
+
+.loading-task-list.open {
+  max-height: 60vh;
+  overflow-y: auto;
+  opacity: 1;
+  margin-top: 16px;
+}
+
+.loading-task {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,.85);
+  text-shadow:
+    0 2px 18px rgba(0,0,0,.6),
+    0 0 30px rgba(167,139,250,.25);
+  transition: color .3s, opacity .3s;
+  animation: taskFadeIn .3s ease;
+}
+
+.loading-task.task-done {
+  color: rgba(255,255,255,.5);
+}
+.loading-task.task-done span {
+  color: rgba(255,255,255,.65);
+}
+
+@keyframes taskFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- 手机端 ---------- */
 @media (max-width: 900px) {
   .loading-screen {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: rgba(6, 7, 12, .92);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    background: rgba(6,7,12,.55);
+    padding: 24px;
   }
-  .loading-card {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: linear-gradient(150deg,
-                rgba(30, 32, 45, .95),
-                rgba(20, 22, 32, .98));
+
+  .loading-status,
+  .loading-head-main {
+    font-size: 16px;
+    gap: 8px;
+  }
+
+  .loading-head {
+    gap: 8px;
+  }
+
+  .loading-check   { width: 18px; height: 18px; }
+  .loading-exclaim { width: 22px; height: 22px; font-size: 15px; }
+  .loading-dots span { width: 6px; height: 6px; }
+
+  .loading-task {
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .loading-toggle {
+    width: 26px;
+    height: 26px;
+  }
+  .loading-toggle svg {
+    width: 14px;
+    height: 14px;
   }
 }
 
+/* ---------- 浅色主题 ---------- */
+html[data-theme="light"] .loading-screen {
+  background: rgba(245,245,247,.55);
+}
+html[data-theme="light"] .loading-status,
+html[data-theme="light"] .loading-head-main {
+  color: #1a1d2e;
+  text-shadow: 0 2px 20px rgba(255,255,255,.8), 0 0 30px rgba(167,139,250,.2);
+}
+html[data-theme="light"] .loading-task {
+  color: rgba(26,29,46,.85);
+  text-shadow: 0 2px 20px rgba(255,255,255,.8);
+}
+html[data-theme="light"] .loading-task.task-done { color: rgba(26,29,46,.5); }
+html[data-theme="light"] .loading-task.task-done span { color: rgba(26,29,46,.6); }
+html[data-theme="light"] .loading-toggle {
+  border-color: rgba(0,0,0,.1);
+  background: rgba(0,0,0,.04);
+  color: rgba(26,29,46,.7);
+}
+html[data-theme="light"] .loading-toggle:hover {
+  background: rgba(0,0,0,.08);
+  border-color: rgba(0,0,0,.15);
+  color: #1a1d2e;
+}
+
+/* ---------- 减少动效 ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .loading-card   { animation: none; }
-  .loading-spinner { animation-duration: 2s; }
-  .loading-screen { transition: none; }
+  .loading-screen, #loadingDetail, .loading-task-list { transition: none; }
+  .loading-dots span, .loading-check circle, .loading-check path,
+  .loading-exclaim, .loading-task, .loading-toggle svg { animation: none; }
+  .loading-check circle, .loading-check path { stroke-dashoffset: 0; }
 }
