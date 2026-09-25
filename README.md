@@ -3,22 +3,52 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-# TClaw-WebUI
+---
 
-一个多功能的个人网站模板 | A Multi-functional Personal Website Template
+## 📖 Introduction
+
+A personal homepage built with vanilla HTML / CSS / JavaScript, featuring a **Liquid Glass** aesthetic. Split-pane layout on desktop, with background images, link cards, open-source project showcase, friend links, a README viewer, click text effects, and tab title effects.
 
 ---
 
-## 📖 简介 · Introduction
+## ✨ Features
 
-**中文：**基于原生 HTML / CSS / JavaScript 的液态玻璃风格个人主页，左右分栏布局。集成动态背景图、链接卡片、开源项目展示、友情链接、README 阅读器、深色/浅色主题、多种点击特效、缓存优化等功能。
-
-**English：** A personal homepage built with vanilla HTML / CSS / JavaScript, featuring a Liquid Glass aesthetic. Split-pane layout on desktop with dynamic backgrounds, link cards, open-source projects, friend links, README viewer, dark/light theme, click effects, and cache optimization.
+| Feature | Description |
+| --- | --- |
+| 🪟 **Liquid Glass UI** | Frosted glass with gradient border and top highlight |
+| 📱 **Responsive Layout** | Desktop split-pane / mobile single column |
+| 🖼️ **Dynamic Background** | Random images from loliapi (landscape for PC, portrait for mobile) |
+| 🔗 **Auto Icons** | Site's own favicon → favicon.im fallback |
+| 📂 **Multiple Section Types** | Open source projects / skills / friend links / timeline / lists |
+| 📄 **README Viewer** | Multi-source auto-switching + Markdown rendering |
+| ✨ **Click Text Effect** | Random text appears on screen click |
+| 🏷️ **Tab Title Effect** | Title changes when switching tabs |
+| ⚡ **Performance Optimizations** | Disables blur effects on mobile, controls icon loading concurrency |
 
 ---
 
-## ✨ 功能特性 · Features
+## 🗂 Project Structure
 
+```
+personal-homepage/
+├── index.html              # Main page
+├── css/
+│   ├── style.css           # Main styles (including glass effects)
+│   ├── section.css         # Section styles
+│   ├── bg-image.css        # Background image styles
+│   ├── click-fx.css        # Click effect styles
+│   └── loading.css         # Loading page styles
+├── js/
+│   ├── config.js           # ★ Personal configuration (main file to edit)
+│   ├── main.js             # Rendering logic
+│   ├── bg-image.js         # Background image loading
+│   ├── click-fx.js         # Click effects
+│   └── title-fx.js         # Title effects
+└── assets/
+├── avatar/
+│   └── avatar.jpg      # Avatar
+├── icons/              # Custom icons
+└── favicon.png         # Site icon (recommended 512×512)
 | 功能 | 说明 |
 | --- | --- |
 | 🪟 液态玻璃 UI | 磨砂玻璃 + 渐变描边 + 顶部高光 |
@@ -94,7 +124,7 @@ personal-homepage/
 
 ---
 
-## 🚀 快速开始 · Quick Start
+## 🚀 Quick Start
 
 1. **克隆项目**
 
@@ -160,9 +190,9 @@ const SITES = [
   {
     name:  'GitHub',
     url:   'https://github.com/yourname',
-    desc:  '我的开源代码',
-    color: 'ffffff',        // 品牌色（hover 光晕）
-    // icon: 'github.png',  // 可选：自定义图标
+    desc:  'My open-source code',
+    color: 'ffffff',        // Brand color (hover glow)
+    // icon: 'github.png',  // Optional: custom icon
   },
 ];
 ```
@@ -185,7 +215,7 @@ const SITES = [
 ```js
 {
   name: 'Capha-Script',
-  desc: '可在 Linux 和 Termux 上运行的 Bash 脚本工具箱',
+  desc: 'A Bash script toolbox that runs on Linux and Termux',
   tags: ['Bash', 'Linux', 'Termux'],
   color: 'a78bfa',
   sources: [
@@ -221,10 +251,10 @@ const SITES = [
 
 ```css
 :root {
-  --pad: 32px;        /* 页面内边距 */
-  --gap: 24px;        /* 栏间距 */
-  --r-lg: 32px;       /* 大圆角 */
-  --r-md: 22px;       /* 中圆角 */
+  --pad: 32px;        /* Page padding */
+  --gap: 24px;        /* Column gap */
+  --r-lg: 32px;       /* Large radius */
+  --r-md: 22px;       /* Medium radius */
 }
 ```
 
@@ -286,6 +316,24 @@ const CONFIG = {
   gravity: 0.16,
   roundness: 0.28,
   glowDesktop: true,
+};
+```
+
+### Particle Effect
+
+Edit the `CONFIG` at the top of `js/particle-fx.js`:
+
+```js
+const CONFIG = {
+  countDesktop: 18,     // Particle count on desktop
+  countMobile:  12,     // Particle count on mobile
+  speedMin: 3,          // Min speed
+  speedMax: 9,          // Max speed
+  sizeMin: 5,           // Min size
+  sizeMax: 11,          // Max size
+  gravity: 0.12,        // Gravity
+  roundness: 0.28,      // Roundness ratio
+  glowDesktop: true,    // Glow on desktop
 };
 ```
 
