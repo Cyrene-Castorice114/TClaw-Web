@@ -1,7 +1,3 @@
-/* =========================================================
-   readme.js —— README 弹窗
-   ========================================================= */
-
 function buildReadmeCandidates(readme) {
   if (Array.isArray(readme)) return readme.filter(Boolean);
   if (typeof readme !== 'string' || !readme) return [];
@@ -71,8 +67,30 @@ function closeReadme() {
   if (modal) modal.classList.remove('open');
 }
 
-async function openReadme(name, readme) {
+/* ---------- 计算扩散原点（按钮中心相对面板的位置） ---------- */
+function calcPanelOrigin(panel, triggerBtn) {
+  if (!triggerBtn) {
+    panel.style.setProperty('--ox', '50%');
+    panel.style.setProperty('--oy', '50%');
+    return;
+  }
+
+  const panelRect = panel.getBoundingClientRect();
+  const btnRect   = triggerBtn.getBoundingClientRect();
+
+  const cx = btnRect.left + btnRect.width  / 2 - panelRect.left;
+  const cy = btnRect.top  + btnRect.height / 2 - panelRect.top;
+
+  const ox = (cx / panelRect.width)  * 100;
+  const oy = (cy / panelRect.height) * 100;
+
+  panel.style.setProperty('--ox', ox.toFixed(2) + '%');
+  panel.style.setProperty('--oy', oy.toFixed(2) + '%');
+}
+
+async function openReadme(name, readme, triggerBtn) {
   const modal   = ensureReadmeModal();
+  const panel   = modal.querySelector('.readme-panel');
   const titleEl = modal.querySelector('#readmeTitle');
   const bodyEl  = modal.querySelector('#readmeBody');
   const srcEl   = modal.querySelector('#readmeSource');
@@ -82,13 +100,24 @@ async function openReadme(name, readme) {
   titleEl.textContent = (name || '') + ' — README';
   srcEl.href = candidates[0] || '#';
 
+  /* ---- 1. 计算扩散原点（面板在 DOM 里能测量） ---- */
+  /* 先临时显示面板（不可见但可测量） */
+  modal.classList.add('measuring');
+  void panel.offsetHeight;              // 强制回流
+  calcPanelOrigin(panel, triggerBtn);
+  modal.classList.remove('measuring');
+
+  /* ---- 2. 设置正文内容 ---- */
   bodyEl.innerHTML =
     '<div class="readme-loading">' +
       '<div class="readme-spinner"></div>' +
       '<div id="readmeLoadingText">正在拉取 README ...</div>' +
     '</div>';
 
-  modal.classList.add('open');
+  /* ---- 3. 打开（触发扩散动画） ---- */
+  requestAnimationFrame(() => {
+    modal.classList.add('open');
+  });
 
   const loadingText = modal.querySelector('#readmeLoadingText');
 
@@ -155,7 +184,6 @@ async function openReadme(name, readme) {
     '</div>';
 }
 
-/* 点击空白处关闭所有下拉菜单 */
 document.addEventListener('click', () => {
   document.querySelectorAll('.project-dropdown.open').forEach(d => d.classList.remove('open'));
 });

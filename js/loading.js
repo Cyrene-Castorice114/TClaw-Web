@@ -1,61 +1,121 @@
-/* =========================================================
-   loading.js —— 加载页控制
-   ========================================================= */
+/* loading.js —— 加载页控制 */
 
 const LoadState = {
-  phase:     'init',
-  total:     0,
-  done:      0,
-  current:   [],
-  lastDone:  [],
+  phase:    'init',
+  tasks:    [],
+  expanded: false,
+  bgResult: null,
   startTime: Date.now(),
 };
 
+function loadingDots() {
+  return '<span class="loading-dots"><span></span><span></span><span></span></span>';
+}
+
+function loadingCheck() {
+  return (
+    '<svg class="loading-check" viewBox="0 0 24 24" fill="none" ' +
+         'stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+      '<circle cx="12" cy="12" r="10"/>' +
+      '<path d="m8 12 3 3 5-6"/>' +
+    '</svg>'
+  );
+}
+
+function loadingExclaim() {
+  return '<span class="loading-exclaim">!</span>';
+}
+
+/* ---------- 任务管理 ---------- */
+function registerTask(id, name) {
+  LoadState.tasks.push({ id, name, status: 'loading' });
+  renderLoadingDetail();
+}
+
+function completeTask(id) {
+  const t = LoadState.tasks.find(x => x.id === id);
+  if (!t || t.status === 'done') return;
+
+  t.status = 'done';
+
+  updateTaskRow(id);
+  updateTaskCounter();
+}
+
+function toggleTasks() {
+  LoadState.expanded = !LoadState.expanded;
+
+  const list   = document.querySelector('.loading-task-list');
+  const toggle = document.querySelector('.loading-toggle');
+
+  if (list)   list.classList.toggle('open', LoadState.expanded);
+  if (toggle) toggle.classList.toggle('open', LoadState.expanded);
+}
+
+/* ---------- 全量渲染 ---------- */
 function renderLoadingDetail() {
   const el = document.getElementById('loadingDetail');
   if (!el) return;
 
   const s = LoadState;
-  const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
+  let html = '';
 
-  let line1 = '';
-  let line2 = '';
+  if (s.phase === 'init') {
+    html = '<div class="loading-status">' + loadingDots() + '<span>正在初始化</span></div>';
 
-  switch (s.phase) {
-    case 'init':
-      line1 = '正在初始化...';
-      line2 = '准备加载资源';
-      break;
+  } else if (s.phase === 'tasks') {
+    const total = s.tasks.length;
+    const done  = s.tasks.filter(t => t.status === 'done').length;
 
-    case 'icons': {
-      line1 = `正在加载图标 <b>${s.done}</b><span class="l-dim"> / ${s.total}</span> <span class="l-dim">(${pct}%)</span>`;
-      if (s.current.length) {
-        const names = s.current.slice(0, 4).map(n => escapeHtml(n)).join('、');
-        const more = s.current.length > 4 ? ' ...' : '';
-        line2 = `<span class="l-dim">正在加载图标：</span>${names}${more}`;
-      }
-      break;
-    }
+    html += '<div class="loading-head">';
+    html += '<div class="loading-head-main">' + loadingDots() +
+            `<span>正在加载（<span id="loadingDoneCount">${done}</span>/${total}）</span></div>`;
+    html += `<button class="loading-toggle${s.expanded ? ' open' : ''}" type="button" onclick="toggleTasks()" aria-label="展开/折叠任务列表">` +
+            `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ` +
+            `stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">` +
+            `<path d="m6 9 6 6 6-6"/></svg></button>`;
+    html += '</div>';
 
-    case 'bg':
-      line1 = `图标加载完成 <b>${s.total}</b><span class="l-dim"> / ${s.total}</span>`;
-      line2 = `<span class="l-dim">正在等待背景图...</span>`;
-      break;
+    html += `<div class="loading-task-list${s.expanded ? ' open' : ''}">`;
+    s.tasks.forEach(t => {
+      const icon = (t.status === 'done') ? loadingCheck() : loadingDots();
+      const cls  = (t.status === 'done') ? 'task-done' : 'task-loading';
+      html += `<div class="loading-task ${cls}" data-task-id="${t.id}">${icon}<span>${t.name}</span></div>`;
+    });
+    html += '</div>';
 
-    case 'done':
-      line1 = '加载完成';
-      line2 = `<span class="l-dim">共 ${s.total} 个图标 · 耗时 ${((Date.now() - s.startTime) / 1000).toFixed(1)}s</span>`;
-      break;
+  } else if (s.phase === 'complete') {
+    html = '<div class="loading-status">' + loadingCheck() + '<span>加载完成</span></div>';
   }
 
-  el.innerHTML =
-    `<div class="l-line">${line1}</div>` +
-    (line2 ? `<div class="l-line l-sub">${line2}</div>` : '');
+  el.style.opacity = 0;
+  requestAnimationFrame(() => {
+    el.innerHTML = html;
+    el.style.opacity = 1;
+  });
 }
 
-function setProgress(p) {
-  const el = document.getElementById('loadingBarFill');
-  if (el) el.style.width = Math.max(0, Math.min(100, p)) + '%';
+function updateTaskRow(id) {
+  const row = document.querySelector(`.loading-task[data-task-id="${id}"]`);
+  if (!row) return;
+  if (row.classList.contains('task-done')) return;
+
+  row.classList.remove('task-loading');
+  row.classList.add('task-done');
+
+  const dots = row.querySelector('.loading-dots');
+  if (dots) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = loadingCheck();
+    dots.replaceWith(tmp.firstChild);
+  }
+}
+
+function updateTaskCounter() {
+  const counter = document.getElementById('loadingDoneCount');
+  if (!counter) return;
+  const done = LoadState.tasks.filter(t => t.status === 'done').length;
+  counter.textContent = done;
 }
 
 function hideLoading() {
@@ -63,19 +123,4 @@ function hideLoading() {
   if (!el || el.classList.contains('hidden')) return;
   el.classList.add('hidden');
   setTimeout(() => el.remove(), 500);
-}
-
-function reportCurrent(name) {
-  if (!LoadState.current.includes(name)) LoadState.current.push(name);
-  renderLoadingDetail();
-}
-
-function reportDone(name) {
-  LoadState.current = LoadState.current.filter(n => n !== name);
-  LoadState.done++;
-  LoadState.lastDone.push(name);
-  if (LoadState.lastDone.length > 3) LoadState.lastDone.shift();
-
-  setProgress(15 + (LoadState.done / LoadState.total) * 60);
-  renderLoadingDetail();
 }

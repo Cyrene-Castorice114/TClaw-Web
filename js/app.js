@@ -1,51 +1,63 @@
-/* =========================================================
-   app.js —— 主入口
-   ========================================================= */
+/* app.js —— 主入口 */
 
-/* ---------- 预加载 ---------- */
-preloadAllIcons(iconQueue);
+(function () {
+  'use strict';
 
-/* ---------- 主流程 ---------- */
-(async function loadAll() {
-  LoadState.total = iconQueue.length;
-  LoadState.phase = 'icons';
-
-  setProgress(15);
-  renderLoadingDetail();
-
-  const isMobile = window.innerWidth < 900;
-  const concurrency = isMobile ? 6 : 10;
-
-  const tasks = iconQueue.map(item => async () => {
-    reportCurrent(item.site.name);
-    await loadIcon(item.site, item.img, item.initialEl, { noFaviconIm: item.noFaviconIm });
-    reportDone(item.site.name);
-  });
-
-  await runWithConcurrency(tasks, concurrency, fn => fn());
-
-  LoadState.phase = 'bg';
-  setProgress(78);
-  renderLoadingDetail();
-
-  if (!window.__bgDone) {
-    await Promise.race([
-      window.__bgReady,
-      new Promise(r => setTimeout(r, 1500)),
-    ]);
+  if (typeof preloadAllIcons === 'function') {
+    preloadAllIcons(iconQueue);
   }
 
-  LoadState.phase = 'done';
-  setProgress(100);
+  LoadState.phase = 'init';
   renderLoadingDetail();
 
-  setTimeout(hideLoading, 300);
-})();
+  (async function loadAll() {
 
-/* ---------- 硬超时兜底：6s 一定进入 ---------- */
-setTimeout(() => {
-  const el = document.getElementById('loadingScreen');
-  if (!el || el.classList.contains('hidden')) return;
-  console.warn('[loading] 硬超时，强制进入');
-  hideLoading();
-}, 6000);
+    await new Promise(r => setTimeout(r, 250));
+
+    /* 切到任务列表模式 */
+    LoadState.phase = 'tasks';
+
+    /* 注册背景图任务 */
+    registerTask('__bg__', '加载背景图');
+
+    /* 注册图标任务 */
+    iconQueue.forEach((item, i) => {
+      registerTask('icon_' + i, '加载图标 · ' + item.site.name);
+    });
+
+    /* 全部并行 */
+    const tasks = [];
+
+    tasks.push((async () => {
+      await Promise.race([
+        window.__bgReady,
+        new Promise(r => setTimeout(r, 3000)),
+      ]);
+      LoadState.bgResult = window.__bgFallback ? 'fail' : 'success';
+      completeTask('__bg__');
+    })());
+
+    iconQueue.forEach((item, i) => {
+      tasks.push(
+        loadIcon(item.site, item.img, item.initialEl, {
+          noFaviconIm: item.noFaviconIm,
+        }).then(() => completeTask('icon_' + i))
+      );
+    });
+
+    await Promise.all(tasks);
+
+    /* 全部完成 → 只显示"加载完成" */
+    LoadState.phase = 'complete';
+    renderLoadingDetail();
+
+    setTimeout(hideLoading, 800);
+
+  })();
+
+  setTimeout(() => {
+    const el = document.getElementById('loadingScreen');
+    if (!el || el.classList.contains('hidden')) return;
+    hideLoading();
+  }, 12000);
+})();

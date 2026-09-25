@@ -1,65 +1,47 @@
-/* =========================================================
-   theme.js
-   ---------------------------------------------------------
-   主题切换（深色 / 浅色）
-   · 自动读取 localStorage
-   · 首次访问跟随系统偏好
-   · 切换按钮动态插入到左上角
-   ========================================================= */
+/* theme.js —— 主题切换按钮 */
+
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'tclaw_theme';
-  const THEME_DARK  = 'dark';
-  const THEME_LIGHT = 'light';
+  const COOKIE_KEY = 'tclaw_theme';
+  const DARK  = 'dark';
+  const LIGHT = 'light';
 
-  /* ---------- 读取初始主题 ---------- */
-  function getInitialTheme() {
-    /* 1. localStorage */
+  function setCookie(name, value, days) {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved === THEME_DARK || saved === THEME_LIGHT) return saved;
+      const exp = new Date(Date.now() + days * 864e5).toUTCString();
+      document.cookie = `${name}=${encodeURIComponent(value)}; expires=${exp}; path=/; SameSite=Lax`;
     } catch (e) {}
-
-    /* 2. 跟随系统偏好 */
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      return THEME_LIGHT;
-    }
-
-    /* 3. 默认深色 */
-    return THEME_DARK;
   }
 
-  /* ---------- 应用主题 ---------- */
-  function applyTheme(theme) {
-    const html = document.documentElement;
-    html.setAttribute('data-theme', theme);
+  function getCookie(name) {
+    try {
+      const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : null;
+    } catch (e) { return null; }
+  }
 
-    /* 同步浏览器 UI 颜色 */
+  function getCurrent() {
+    return document.documentElement.getAttribute('data-theme') || DARK;
+  }
+
+  function apply(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) {
-      meta.setAttribute('content', theme === THEME_LIGHT ? '#f5f5f7' : '#06070c');
-    }
-
-    /* 更新按钮图标 */
+    if (meta) meta.setAttribute('content', theme === LIGHT ? '#f5f5f7' : '#06070c');
     const btn = document.getElementById('themeToggle');
     if (btn) {
-      btn.setAttribute('aria-label',
-        theme === THEME_DARK ? '切换到浅色模式' : '切换到深色模式');
-      btn.classList.toggle('is-light', theme === THEME_LIGHT);
+      btn.setAttribute('aria-label', theme === DARK ? '切换到浅色模式' : '切换到深色模式');
+      btn.classList.toggle('is-light', theme === LIGHT);
     }
   }
 
-  /* ---------- 保存 ---------- */
-  function saveTheme(theme) {
-    try { localStorage.setItem(STORAGE_KEY, theme); } catch (e) {}
+  function setManually(theme) {
+    apply(theme);
+    setCookie(COOKIE_KEY, theme, 365);
   }
 
-  /* ---------- 立即应用（在 DOM ready 前） ---------- */
-  applyTheme(getInitialTheme());
-
-  /* ---------- 创建切换按钮 ---------- */
-  function createToggleButton() {
+  function createButton() {
     if (document.getElementById('themeToggle')) return;
 
     const btn = document.createElement('button');
@@ -68,19 +50,14 @@
     btn.className = 'theme-toggle';
     btn.setAttribute('aria-label', '切换主题');
 
-    /* 双图标：太阳/月亮，CSS 控制显隐 */
     btn.innerHTML = `
       <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none"
            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="4"/>
-        <path d="M12 2v2"/>
-        <path d="M12 20v2"/>
-        <path d="m4.93 4.93 1.41 1.41"/>
-        <path d="m17.66 17.66 1.41 1.41"/>
-        <path d="M2 12h2"/>
-        <path d="M20 12h2"/>
-        <path d="m6.34 17.66-1.41 1.41"/>
-        <path d="m19.07 4.93-1.41 1.41"/>
+        <path d="M12 2v2"/><path d="M12 20v2"/>
+        <path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/>
+        <path d="M2 12h2"/><path d="M20 12h2"/>
+        <path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
       </svg>
       <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none"
            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -89,51 +66,27 @@
     `;
 
     document.body.appendChild(btn);
-
     btn.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme') || THEME_DARK;
-      const next = current === THEME_DARK ? THEME_LIGHT : THEME_DARK;
-      applyTheme(next);
-      saveTheme(next);
+      setManually(getCurrent() === DARK ? LIGHT : DARK);
     });
+
+    /* 同步按钮初始状态 */
+    apply(getCurrent());
   }
 
-  /* ---------- 跟随系统变化（当用户没手动切过） ---------- */
-  if (window.matchMedia) {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      /* 用户没手动存过 → 跟随系统 */
-      try {
-        if (!localStorage.getItem(STORAGE_KEY)) {
-          applyTheme(e.matches ? THEME_DARK : THEME_LIGHT);
-        }
-      } catch (err) {}
-    });
-  }
-
-  /* ---------- DOM ready 后创建按钮 ---------- */
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createToggleButton);
+    document.addEventListener('DOMContentLoaded', createButton);
   } else {
-    createToggleButton();
+    createButton();
   }
 
-  /* ---------- 暴露接口 ---------- */
   window.ThemeFX = {
-    set(theme) {
-      if (theme !== THEME_DARK && theme !== THEME_LIGHT) return;
-      applyTheme(theme);
-      saveTheme(theme);
+    set: setManually,
+    get current() { return getCurrent(); },
+    toggle() { setManually(getCurrent() === DARK ? LIGHT : DARK); },
+    clearCookie() {
+      setCookie(COOKIE_KEY, '', -1);
     },
-    get current() {
-      return document.documentElement.getAttribute('data-theme');
-    },
-    toggle() {
-      const current = document.documentElement.getAttribute('data-theme') || THEME_DARK;
-      const next = current === THEME_DARK ? THEME_LIGHT : THEME_DARK;
-      applyTheme(next);
-      saveTheme(next);
-    },
+    get hasCookie() { return !!getCookie(COOKIE_KEY); },
   };
-
-  console.log('[theme] 已加载 ✅');
 })();

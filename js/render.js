@@ -304,7 +304,10 @@ function renderSectionProjects(section, container) {
       txt.textContent = '文档';
       btn.appendChild(txt);
 
-      btn.addEventListener('click', () => openReadme(item.name, item.readme));
+      /* ★ 把按钮元素传给 openReadme，用于计算扩散方向 */
+      btn.addEventListener('click', (e) => {
+        openReadme(item.name, item.readme, e.currentTarget);
+      });
       actions.appendChild(btn);
     }
 
